@@ -1,4 +1,5 @@
-ActiveAdmin.register User, as: "Member" do
+ActiveAdmin.register User do
+	menu false
 	permit_params User.permit_params	
 # See permitted parameters documentation:
 # https://github.com/activeadmin/activeadmin/blob/master/docs/2-resource-customization.md#setting-up-strong-parameters

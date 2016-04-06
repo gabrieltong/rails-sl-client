@@ -1,5 +1,5 @@
 Rails.application.routes.draw do
-  devise_for :admin_users, ActiveAdmin::Devise.config
+  devise_for :members, ActiveAdmin::Devise.config
   ActiveAdmin.routes(self)
   # root to: "home#index"
   # The priority is based upon order of creation: first created -> highest priority.
