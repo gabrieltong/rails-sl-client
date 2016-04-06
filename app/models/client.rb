@@ -24,8 +24,8 @@ class Client < ActiveRecord::Base
 
   belongs_to :sp, :class_name=>:Client, :foreign_key=>:sp_id
   has_many :clients, :class_name=>:Client, :foreign_key=>:sp_id
-  has_many :client_users
-  has_many :users, :through=>:client_users
+  has_many :client_members
+  has_many :members, :through=>:client_members
 
   scope :sp, ->{where(:is_sp=>true)}
 

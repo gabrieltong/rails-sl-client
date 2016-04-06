@@ -1,6 +1,8 @@
 ActiveAdmin.register Member do
   permit_params :email, :password, :password_confirmation
 
+  scope_to :current_member, :association_method=>:managed_members
+
   index do
     selectable_column
     id_column
@@ -24,5 +26,6 @@ ActiveAdmin.register Member do
     end
     f.actions
   end
+
 
 end

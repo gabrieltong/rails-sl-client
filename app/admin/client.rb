@@ -1,5 +1,7 @@
 ActiveAdmin.register Client do
 	permit_params Client.permit_params
+
+	scope_to :current_member, :association_method=>:managed_clients
 # See permitted parameters documentation:
 # https://github.com/activeadmin/activeadmin/blob/master/docs/2-resource-customization.md#setting-up-strong-parameters
 #
