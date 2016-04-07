@@ -32,6 +32,7 @@ class Client < ActiveRecord::Base
   has_many :members, :through=>:client_members
   has_many :shops
   has_many :groups
+  has_many :group_members, :through=>:members
   has_many :client_managers
   has_many :managers, :through=>:client_managers
 

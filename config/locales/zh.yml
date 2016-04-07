@@ -52,7 +52,15 @@
       shop: '门店'
       client_member: '会员'
       client_manager: '操作员'
+      group: '会员组'
     attributes:
+      group:
+        id: '会员组ID'
+        title: '会员组名'
+        position: '权重'
+        desc: '简介'
+        active: '是否开启'
+        default: '默认群组'
       shop:
         client: '商户'
         title: '门店名'
