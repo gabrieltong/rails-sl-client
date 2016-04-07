@@ -1,4 +1,5 @@
 ActiveAdmin.register Member do
+  menu false
   permit_params Member.client_permit_params
 
   # scope_to :current_member, :association_method=>:managed_members

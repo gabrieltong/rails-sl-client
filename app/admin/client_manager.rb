@@ -1,8 +1,9 @@
 ActiveAdmin.register ClientManager do
+	menu false
 	permit_params ClientManager.permit_params
 
 	includes :shop
-	
+
 	scope :all
 	scope :admin
 	scope :checker
