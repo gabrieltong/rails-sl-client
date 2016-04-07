@@ -8,28 +8,6 @@ ActiveAdmin.register ClientManager do
 
 	controller do
     belongs_to :client, optional: true
-
-    def create
-    	m = Member.find_by_phone(params[:client_manager][:phone])
-    	unless m 
-    		m = Member.new(:phone=>params[:client_manager][:phone])
-    		m.password = 12345678
-    		m.save
-    	end
-    	params[:client_manager][:member_id] = m.id
-    	create!
-    end
-
-    def update
-    	m = Member.find_by_phone(params[:client_manager][:phone])
-    	unless m 
-    		m = Member.new(:phone=>params[:client_manager][:phone])
-    		m.password = 12345678
-    		m.save
-    	end
-    	params[:client_manager][:member_id] = m.id
-    	update!
-    end
   end
 
   form do |f|
