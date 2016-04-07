@@ -285,7 +285,7 @@ ActiveAdmin.setup do |config|
   #
   # config.filters = true
 
-  # config.authorization_adapter = ActiveAdmin::CanCanAdapter
-  # config.on_unauthorized_access = :access_denied
+  config.authorization_adapter = ActiveAdmin::CanCanAdapter
+  config.on_unauthorized_access = :access_denied
 end
 

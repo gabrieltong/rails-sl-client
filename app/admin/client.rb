@@ -50,7 +50,33 @@ ActiveAdmin.register Client do
 	show do 
 		attributes_table do
 			row :id
+			row :hqhj
+			row :hyzx
 			row :title
+			row :reg
+			row :address
+			row :location_y
+			row :localtion_x
+			row :area
+			row :phone
+			row :logo do 
+				image_tag resource.logo.url(:thumb)
+			end
+			row :type
+			row :service_started
+			row :service_ended_at
+			row :website
+			row :tags_text
+			row :wechat_account
+			row :wechat_title				
+			row :logo do 
+				image_tag resource.wechat_logo.url(:thumb)
+			end
+			row :admin_phone
+			shifou_row :is_sp
+			if resource.sp
+				row :sp, :collection=>Client.sp			
+			end
 			shifou_row :show_name
 			shifou_row :show_phone
 			shifou_row :show_sex
