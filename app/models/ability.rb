@@ -4,8 +4,10 @@ class Ability
   def initialize(user)
 
     # cannot :manage, :all
-    can :manage, Member
-    can :manage, Client
+    # can :read, ClientMember
+    can :manage, ClientMember, :client=>{:admin_phone=>user.phone}
+    can :manage, Client, :admin_phone=> user.phone
+    # can :manage, Member, :client_members=>[:client=>{:admin_phone=> user.phone}]
     # can :read
     # Define abilities for the passed in user here. For example:
     #

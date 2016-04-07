@@ -1,6 +1,10 @@
 Rails.application.routes.draw do
   devise_for :members, ActiveAdmin::Devise.config
   ActiveAdmin.routes(self)
+
+  resources :clients do 
+    resources :members
+  end
   # root to: "home#index"
   # The priority is based upon order of creation: first created -> highest priority.
   # See how all your routes lay out with "rake routes".
