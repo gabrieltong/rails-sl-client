@@ -1,5 +1,5 @@
 class Member < ActiveRecord::Base
-	attr_accessor :name,:sex,:borded_at,:pic,:address,:email, :tmp_client
+	attr_accessor :name,:sex,:borded_at,:pic,:address,:email	
   # Include default devise modules. Others available are:
   # :confirmable, :lockable, :timeoutable and :omniauthable
   devise :database_authenticatable, 

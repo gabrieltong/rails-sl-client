@@ -14,6 +14,13 @@ ActiveAdmin.register Client do
 #   permitted << :other if resource.something?
 #   permitted
 # end
+ 	action_item :members, :only=>:show do 
+    link_to Member.model_name.human, client_members_path(resource)
+  end
+
+  action_item :shops, :only=>:show do 
+    link_to Shop.model_name.human, client_shops_path(resource)
+  end
 	
 	index do |subject|
 		selectable_column
