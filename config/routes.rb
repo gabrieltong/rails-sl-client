@@ -5,6 +5,7 @@ Rails.application.routes.draw do
   resources :clients do 
     resources :members
     resources :shops
+    resources :client_managers
   end
   # root to: "home#index"
   # The priority is based upon order of creation: first created -> highest priority.

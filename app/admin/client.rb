@@ -21,6 +21,10 @@ ActiveAdmin.register Client do
   action_item :shops, :only=>:show do 
     link_to Shop.model_name.human, client_shops_path(resource)
   end
+
+  action_item :client_managers, :only=>:show do 
+    link_to ClientManager.model_name.human, client_client_managers_path(resource)
+  end
 	
 	index do |subject|
 		selectable_column
