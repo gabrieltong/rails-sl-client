@@ -1,6 +1,8 @@
 ActiveAdmin.register ClientManager do
 	permit_params ClientManager.permit_params
 
+	includes :shop
+	
 	scope :all
 	scope :admin
 	scope :checker
@@ -13,6 +15,7 @@ ActiveAdmin.register ClientManager do
   form do |f|
 		f.semantic_errors *f.object.errors.keys
 		inputs I18n.t(:detail) do
+			f.input :shop, :collection=>Client.find(params[:client_id]).shops
 			f.input :phone
 			f.input :name
 			f.input :admin
@@ -25,6 +28,7 @@ ActiveAdmin.register ClientManager do
 	index do 
 		selectable_column
     id_column
+    column :shop
     column :phone
 		column :name
 		column :admin
@@ -35,6 +39,7 @@ ActiveAdmin.register ClientManager do
 
 	show do 
 		attributes_table do
+			row :shop
 			row :phone
 			row :name
 			shifou_row :admin
@@ -43,6 +48,7 @@ ActiveAdmin.register ClientManager do
 		end
 	end
 
+	filter :shop
   filter :phone
 	filter :name
 	filter :admin
