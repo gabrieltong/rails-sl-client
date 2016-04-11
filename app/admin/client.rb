@@ -18,16 +18,16 @@ ActiveAdmin.register Client do
     link_to Member.model_name.human, client_client_members_path(resource)
   end
 
+  action_item :groups, :only=>:show do 
+    link_to Group.model_name.human, client_groups_path(resource)
+  end
+  
   action_item :shops, :only=>:show do 
     link_to Shop.model_name.human, client_shops_path(resource)
   end
 
   action_item :client_managers, :only=>:show do 
     link_to ClientManager.model_name.human, client_client_managers_path(resource)
-  end
-
-  action_item :groups, :only=>:show do 
-    link_to Group.model_name.human, client_groups_path(resource)
   end
 	
 	index do |subject|
