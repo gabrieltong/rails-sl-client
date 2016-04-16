@@ -1,0 +1,5 @@
+'zh-CN':
+  active_admin:
+    devise:
+      phone:
+        title:  "电话"
