@@ -1,7 +1,22 @@
 ActiveAdmin.register Client do
-	permit_params :show_name,:show_phone,:show_sex,:show_borded_at,:show_pic,:show_address,:show_email
+	menu :priority=>20
 
-	# scope_to :current_member, :association_method=>:managed_clients
+	permit_params :show_name,:show_phone,:show_sex,:show_borned_at,:show_pic,:show_address,:show_email
+	
+	scope_to :current_client
+
+	controller do 
+		def index
+			redirect_to client_path(current_client)
+		end
+
+		def update
+			update! do 
+				redirect_to client_members_path
+				return
+			end
+		end
+	end
 # See permitted parameters documentation:
 # https://github.com/activeadmin/activeadmin/blob/master/docs/2-resource-customization.md#setting-up-strong-parameters
 #
@@ -14,13 +29,13 @@ ActiveAdmin.register Client do
 #   permitted << :other if resource.something?
 #   permitted
 # end
- 	action_item :members, :only=>:show do 
-    link_to Member.model_name.human, client_client_members_path(resource)
+ 	action_item :client_members, :only=>:show do 
+    link_to ClientMember.model_name.human, client_client_members_path(resource)
   end
 
-  action_item :groups, :only=>:show do 
-    link_to Group.model_name.human, client_groups_path(resource)
-  end
+  # action_item :groups, :only=>:show do 
+  #   link_to Group.model_name.human, client_groups_path(resource)
+  # end
   
   action_item :shops, :only=>:show do 
     link_to Shop.model_name.human, client_shops_path(resource)
@@ -43,7 +58,7 @@ ActiveAdmin.register Client do
 			f.input :show_name
 			f.input :show_phone
 			f.input :show_sex
-			f.input :show_borded_at
+			f.input :show_borned_at
 			f.input :show_pic
 			f.input :show_address
 			f.input :show_email
@@ -54,40 +69,26 @@ ActiveAdmin.register Client do
 	show do 
 		attributes_table do
 			row :id
-			row :hqhj
-			row :hyzx
-			row :title
-			row :reg
-			row :address
-			row :location_y
-			row :localtion_x
-			row :area
-			row :phone
-			row :logo do 
-				image_tag resource.logo.url(:thumb)
-			end
-			row :type
-			row :service_started
-			row :service_ended_at
-			row :website
-			row :tags_text
-			row :wechat_account
-			row :wechat_title				
-			row :logo do 
-				image_tag resource.wechat_logo.url(:thumb)
-			end
-			row :admin_phone
-			shifou_row :is_sp
-			if resource.sp
-				row :sp, :collection=>Client.sp			
-			end
-			shifou_row :show_name
-			shifou_row :show_phone
-			shifou_row :show_sex
-			shifou_row :show_borded_at
-			shifou_row :show_pic
-			shifou_row :show_address
-			shifou_row :show_email
+      row :hqhj
+      row :hyzx
+      row :title
+      row :reg
+      row :address
+      row :location_y
+      row :localtion_x
+      row :area
+      row :phone
+      image_row :logo
+      row :type
+      row :service_started
+      row :service_ended_at
+      row :website
+      row :tags_text
+      row :wechat_account
+      row :wechat_title       
+      image_row :wechat_logo
+      row :admin_phone
+      row :sp, :collection=>Client.sp
 		end
 	end
 

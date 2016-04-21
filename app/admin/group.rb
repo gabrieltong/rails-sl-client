@@ -1,7 +1,8 @@
 ActiveAdmin.register Group do
-	menu false
-
+	# menu :priority=>20 
+  menu false
 	permit_params Group.permit_params
+  scope_to :current_client, :association_method=>:groups
 # See permitted parameters documentation:
 # https://github.com/activeadmin/activeadmin/blob/master/docs/2-resource-customization.md#setting-up-strong-parameters
 #
@@ -17,6 +18,11 @@ ActiveAdmin.register Group do
 
 	controller do
     belongs_to :client, optional: true
+  end
+
+  member_action :set_default, method: :get do 
+    resource.to_default
+    redirect_to request.referer, notice: "设置默认成功"
   end
 
 	form do |f|
@@ -35,8 +41,8 @@ ActiveAdmin.register Group do
     attributes_table do
       row :title
       row :position
-      row :default
-      row :active      
+      shifou_row :default
+      shifou_row :active      
       row :desc
     end
   end
@@ -49,7 +55,9 @@ ActiveAdmin.register Group do
     column :default
     column :active      
     column :desc
-    actions
+    actions :default=>true,  min_width: "180px" do |group|
+      link_to '设为默认', set_default_group_path(group)
+    end
   end  
 
 	filter :title

@@ -2,6 +2,13 @@ Rails.application.routes.draw do
   devise_for :members, ActiveAdmin::Devise.config
   ActiveAdmin.routes(self)
 
+  # resources :card_a_tpls, :only=>[] do 
+  #   member do 
+  #     get :setting
+  #     patch :setting
+  #   end
+  # end
+
   resources :clients do 
     resources :members
     resources :shops

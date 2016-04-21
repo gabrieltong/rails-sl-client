@@ -1,0 +1,25 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  client_id: 1
+  title: MyString
+  desc: MyString
+  discount_desc: MyString
+  discount_intro: MyString
+  type: 
+  indate_type: MyString
+  indate_from: 2016-04-20 11:18:39
+  indate_to: 2016-04-20 11:18:39
+  indate_after: 1
+
+two:
+  client_id: 1
+  title: MyString
+  desc: MyString
+  discount_desc: MyString
+  discount_intro: MyString
+  type: 
+  indate_type: MyString
+  indate_from: 2016-04-20 11:18:39
+  indate_to: 2016-04-20 11:18:39
+  indate_after: 1

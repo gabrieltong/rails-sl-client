@@ -41,6 +41,15 @@ module ActiveAdmin
     end
     class AttributesTable
       
+      
+      def i18n_row_by_key(attribute)
+        row(attribute) do  |model| 
+          if model[attribute] && !model[attribute].blank?
+            I18n.t "#{attribute}.#{model[attribute]}" 
+          end
+        end
+      end
+
       def i18n_row(attribute)
         row(attribute) do  |model| 
         	if model[attribute] && !model[attribute].blank?
@@ -93,8 +102,18 @@ module ActiveAdmin
 
       def image_row(attribute)
       	row(attribute) do |model|
-      		link_to image_tag(model.try(attribute).url(:medium)),model.try(attribute).url,target: '_blank'
+          if !model.try(attribute).blank?
+      		  link_to image_tag(model.try(attribute).url(:medium)),model.try(attribute).url,target: '_blank'
+          end
       	end
+      end
+
+      def thumb_row(attribute)
+        row(attribute) do |model|
+          if !model.try(attribute).blank?
+            link_to image_tag(model.try(attribute).url(:thumb)),model.try(attribute).url,target: '_blank'
+          end
+        end
       end
 
       def file_row(attribute)
@@ -122,7 +141,7 @@ module ActiveAdminHelper
 	def shifou(value)
 		return '是' if value == true || value == 1
 		return '否' if value == false || value == 0
-		''
+		'否'
 	end
 
 	def need(value)

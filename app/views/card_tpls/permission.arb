@@ -1,0 +1,10 @@
+active_admin_form_for resource do |f|
+  f.semantic_errors *f.object.errors.keys
+  f.inputs I18n.t(:detail) do
+  	f.input :groups, :collection=>Client.find(session[:current_client_id]).groups, :as=>:check_boxes
+  	f.input :allow_share
+  	f.input :public
+  end
+
+  f.actions
+end

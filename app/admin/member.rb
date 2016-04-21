@@ -2,13 +2,19 @@ ActiveAdmin.register Member do
   menu false
   permit_params Member.client_permit_params
 
-  # scope_to :current_member, :association_method=>:managed_members
+  scope_to :current_client, :association_method=>:members
 
   
 
   controller do
     belongs_to :client, optional: true
+    def index
+      p current_client
+      index!
+    end
+
     def edit
+
       # edit!
       # @member.clients.where(:id=>current_member.managed_clients).first
     end

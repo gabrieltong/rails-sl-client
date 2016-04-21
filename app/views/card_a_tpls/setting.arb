@@ -1,0 +1,39 @@
+active_admin_form_for resource do |f|
+  f.semantic_errors *f.object.errors.keys
+
+  f.inputs I18n.t(:detail) do
+    # f.input :_from
+    f.input :total, :input_html=>{:disabled=>true}
+    f.input :remain, :input_html=>{:disabled=>true}
+    f.input :change_remain, :hint=>'增加后者减少， 总库存不能少于1'
+    f.input :person_limit
+
+    table_for resource.quantities.order('id desc'), :class=>'index index_table' do 
+      column :number
+      column :created_at
+      column :member
+    end
+  end
+
+  f.inputs '定时' do
+    f.input :acquire_from, as: :date_time_picker
+    f.input :acquire_to, as: :date_time_picker
+    f.input :acquire_use_weeks, :collection=>CardTpl::UseWeeks, :as=>:check_boxes
+
+    f.has_many :periods, heading: false, allow_destroy: true do |f2|
+      f2.input :from, as: :date_time_picker, datepicker_options: { datepicker:false, format: 'H:i' }
+      f2.input :to, as: :date_time_picker, datepicker_options: { datepicker:false, format: 'H:i' }
+      f2.input :number
+      f2.input :person_limit
+    end
+  end
+
+  # f.inputs '数量' do
+
+  #   f.has_many :quantities, heading: false, allow_destroy: false do |f2|
+  #     f2.input :number
+  #   end
+  # end
+
+  f.actions
+end

@@ -11,7 +11,28 @@
 @import "active_admin/mixins";
 @import "active_admin/base";
 @import "wigu/active_admin_theme";
+@import "active_admin_datetimepicker";
 // Overriding any non-variable SASS must be done after the fact.
 // For example, to change the default status-tag color:
 //
 //   .status_tag { background: #6090DB; }
+
+form fieldset > ol > li.check_boxes fieldset ol li, form fieldset > ol > li.radio fieldset ol li {
+	display: inline-block;
+	margin: 0 3px;
+	padding: 0 3px;
+}
+
+form fieldset.inputs ol > li input:disabled, form fieldset.inputs ol > li textarea:disabled{
+	background-color: #ccc;
+}
+
+input:disabled{
+	border: 1px solid #DDD;
+	background-color: #333;
+	color:#ACA899;
+}
+
+.hidden{
+	display:none
+}
