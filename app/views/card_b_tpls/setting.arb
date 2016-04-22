@@ -8,12 +8,6 @@ active_admin_form_for resource do |f|
     f.input :prediction, :input_html=>{:disabled=>true}, :hint=>'中奖概率=奖品总数/(预计参与人数*每人限领总数)'
     f.input :change_remain, :as=>:number, :hint=>'增加后者减少， 总库存不能少于1'
     f.input :person_limit
-
-    table_for resource.quantities.order('id desc'), :class=>'index index_table' do 
-      column :number
-      column :created_at
-      column :member
-    end
   end
 
   f.inputs '定时' do

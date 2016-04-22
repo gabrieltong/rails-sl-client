@@ -89,7 +89,9 @@ ActiveAdmin.register CardTpl do
 	index do 
 		selectable_column
     id_column
-    column :type
+    column :type do |i|
+    	I18n.t("activerecord.models.#{i.type.underscore}")
+    end
     column :title
     actions :defaults=>true do |i|
     	[

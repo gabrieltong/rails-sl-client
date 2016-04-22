@@ -38,7 +38,13 @@ ActiveAdmin.register CardATpl do
     resource._from = :setting
   end
 
-  member_action :permission do
+  member_action :permission, :method=>[:get, :patch] do
+    if request.get?
+    else
+      if resource.update_attributes(permitted_params[:card_a_tpl])
+        redirect_to permission_card_a_tpl_path(resource), :notice=>I18n.t(:update_success)
+      end
+    end
   end
 
   # member_action :setting, :method=>[:get, :patch, :put] do 
@@ -60,6 +66,14 @@ ActiveAdmin.register CardATpl do
 
   action_item :permission, :only=>:show do 
     link_to '权限', permission_card_a_tpl_path(resource)
+  end
+
+  sidebar '投放数量变化', :only=>[:setting] do 
+    table_for resource.quantities.order('id desc'), :class=>'index index_table' do 
+      column :number
+      column :created_at
+      column :member
+    end
   end
 
 	form do |f|

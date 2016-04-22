@@ -1,4 +1,5 @@
 'zh-CN':
+  update_success: '更新成功'
   use_weeks:
     mon: '周一'
     thu: '周二'
@@ -48,7 +49,6 @@
     h22: "21点~22点"
     h23: "22点~23点"
     h24: "23点~24点"
-
   indate_type:
     fixed: '固定期限'
     dynamic: '动态期限'
@@ -313,6 +313,7 @@
         number: '每时段投放张数'
         person_limit: '每时段每人限领'
       card_tpl:
+        groups: '参与权限'
         allow_share: '允许分享领取链接'
         public: '是否公开'
         acquire_from: '投放开始时间'

@@ -7,14 +7,9 @@ active_admin_form_for resource do |f|
     f.input :remain, :input_html=>{:disabled=>true}
     f.input :change_remain, :hint=>'增加后者减少， 总库存不能少于1'
     f.input :person_limit
-
-    table_for resource.quantities.order('id desc'), :class=>'index index_table' do 
-      column :number
-      column :created_at
-      column :member
-    end
   end
 
+  
   f.inputs '定时' do
     f.input :acquire_from, as: :date_time_picker
     f.input :acquire_to, as: :date_time_picker
