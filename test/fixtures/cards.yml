@@ -1,0 +1,21 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  code: MyString
+  card_tpl_id: 1
+  phone: MyString
+  acquired_at: 2016-04-22 10:31:27
+  checked_at: 2016-04-22 10:31:27
+  state: MyString
+  type: 
+  deleted_at: 2016-04-22 10:31:27
+
+two:
+  code: MyString
+  card_tpl_id: 1
+  phone: MyString
+  acquired_at: 2016-04-22 10:31:27
+  checked_at: 2016-04-22 10:31:27
+  state: MyString
+  type: 
+  deleted_at: 2016-04-22 10:31:27

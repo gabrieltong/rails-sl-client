@@ -18,6 +18,7 @@ class CardTpl < ActiveRecord::Base
   has_many :quantities
   has_many :images, :as=>:imageable
   has_many :draw_awards
+  has_many :cards
 
   scope :ab, ->{where(:type=>[:CardATpl, :CardBTpl])}
   scope :a, ->{where(:type=>:CardATpl)}
@@ -31,8 +32,6 @@ class CardTpl < ActiveRecord::Base
   accepts_nested_attributes_for :periods, :allow_destroy => true
   accepts_nested_attributes_for :groups, :allow_destroy => true
   accepts_nested_attributes_for :quantities, :allow_destroy => false
-
-
 
   validates :client_id, :title, :presence=>true
   validates :person_limit, :numericality => {:greater_than => 0}

@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160421091154) do
+ActiveRecord::Schema.define(version: 20160422025220) do
 
   create_table "active_admin_comments", force: :cascade do |t|
     t.string   "namespace",     limit: 255
@@ -181,6 +181,32 @@ ActiveRecord::Schema.define(version: 20160421091154) do
   add_index "card_tpls", ["status"], name: "index_card_tpls_on_status", using: :btree
   add_index "card_tpls", ["total"], name: "index_card_tpls_on_total", using: :btree
   add_index "card_tpls", ["type"], name: "index_card_tpls_on_type", using: :btree
+
+  create_table "cards", force: :cascade do |t|
+    t.string   "type",                limit: 10, default: "", null: false
+    t.integer  "card_tpl_id",         limit: 4
+    t.string   "code",                limit: 20, default: "", null: false
+    t.string   "state",               limit: 10, default: "", null: false
+    t.datetime "deleted_at"
+    t.integer  "card_a_id",           limit: 4
+    t.string   "phone",               limit: 20, default: "", null: false
+    t.datetime "acquired_at"
+    t.datetime "checked_at"
+    t.datetime "created_at",                                  null: false
+    t.datetime "updated_at",                                  null: false
+    t.integer  "added_quantity_id",   limit: 4
+    t.integer  "removed_quantity_id", limit: 4
+    t.integer  "client_id",           limit: 4
+  end
+
+  add_index "cards", ["added_quantity_id"], name: "index_cards_on_added_quantity_id", using: :btree
+  add_index "cards", ["card_tpl_id"], name: "index_cards_on_card_tpl_id", using: :btree
+  add_index "cards", ["client_id"], name: "index_cards_on_client_id", using: :btree
+  add_index "cards", ["code"], name: "index_cards_on_code", unique: true, using: :btree
+  add_index "cards", ["phone"], name: "index_cards_on_phone", using: :btree
+  add_index "cards", ["removed_quantity_id"], name: "index_cards_on_removed_quantity_id", using: :btree
+  add_index "cards", ["state"], name: "index_cards_on_state", using: :btree
+  add_index "cards", ["type"], name: "index_cards_on_type", using: :btree
 
   create_table "client_managers", force: :cascade do |t|
     t.integer  "client_id",  limit: 4
