@@ -12,9 +12,14 @@ ActiveAdmin.register CardBTpl do
 		end
 	end
 
-  member_action :setting do 
-    resource.change_remain = 0
-    resource._from = :setting
+  member_action :setting, :method=>[:get, :patch] do 
+    if request.get?
+      resource.change_remain = 0
+    else
+      if resource.update_attributes(permitted_params[:card_b_tpl])
+        redirect_to permission_card_b_tpl_path(resource), :notice=>I18n.t(:update_success)
+      end
+    end
   end
 
   member_action :permission, :method=>[:get, :patch] do
