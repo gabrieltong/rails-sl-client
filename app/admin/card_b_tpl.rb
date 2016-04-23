@@ -17,7 +17,7 @@ ActiveAdmin.register CardBTpl do
       resource.change_remain = 0
     else
       if resource.update_attributes(permitted_params[:card_b_tpl])
-        redirect_to permission_card_b_tpl_path(resource), :notice=>I18n.t(:update_success)
+        redirect_to setting_card_b_tpl_path(resource), :notice=>I18n.t(:update_success)
       end
     end
   end

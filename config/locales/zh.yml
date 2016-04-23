@@ -1,4 +1,12 @@
 'zh-CN':
+  card_tpl:
+    type:
+      CardATpl: '优惠券'
+      CardBTpl: '抽奖券'
+    state:
+      active: '已上架'
+      inactive: '已下架'
+      paused: '已暂停'
   update_success: '更新成功'
   use_weeks:
     mon: '周一'
@@ -313,6 +321,9 @@
         number: '每时段投放张数'
         person_limit: '每时段每人限领'
       card_tpl:
+        state: '状态'
+        acquire_range: '投放日期'
+        client_id: '商户ID'
         groups: '参与权限'
         allow_share: '允许分享领取链接'
         public: '是否公开'
@@ -347,6 +358,13 @@
         change_remain: '修改库存'
         total: '投放总数'
         remain: '库存'
+  helpers:
+    select:
+      prompt: 请选择
+    submit:
+      activate: '上架'
+      deactivate: '下架'
+      pause: '暂停'
   active_admin:
     scopes:
       with_points: '已有知识点'

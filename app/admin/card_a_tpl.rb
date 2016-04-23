@@ -38,7 +38,7 @@ ActiveAdmin.register CardATpl do
       resource.change_remain = 0
     else
       if resource.update_attributes(permitted_params[:card_a_tpl])
-        redirect_to permission_card_a_tpl_path(resource), :notice=>I18n.t(:update_success)
+        redirect_to setting_card_a_tpl_path(resource), :notice=>I18n.t(:update_success)
       end
     end
   end

@@ -41,7 +41,7 @@ gem 'activeadmin-select2', github: 'mfairburn/activeadmin-select2'
 gem 'active_admin_theme'
 gem 'devise-i18n'
 gem 'active_admin_datetimepicker'
-
+gem 'state_machine'
 # Use ActiveModel has_secure_password
 # gem 'bcrypt', '~> 3.1.7'
 

@@ -1,4 +1,5 @@
 ActiveAdmin.register CardTpl do
+  decorate_with CardTplDecorator
   menu :priority=>30
 
   permit_params :allow_share, :public
@@ -60,9 +61,34 @@ ActiveAdmin.register CardTpl do
 
 	end
 
-	member_action :pause do 
-
+	member_action :activate do
+		resource.activate if resource.can_activate?
+		if request.get?
+			redirect_to card_tpls_path
+		else
+			render :json=>{}
+		end
 	end
+
+	member_action :pause do
+		resource.pause if resource.can_pause?
+		if request.get?
+			redirect_to card_tpls_path
+		else
+			render :json=>{}
+		end
+	end
+
+	member_action :deactivate do
+		resource.deactivate if resource.can_deactivate?
+		if request.get?
+			redirect_to card_tpls_path
+		else
+			render :json=>{}
+		end
+	end
+
+
 # See permitted parameters documentation:
 # https://github.com/activeadmin/activeadmin/blob/master/docs/2-resource-customization.md#setting-up-strong-parameters
 #
@@ -89,22 +115,36 @@ ActiveAdmin.register CardTpl do
 	index do 
 		selectable_column
     id_column
+    column :client_id
     column :type do |i|
     	I18n.t("activerecord.models.#{i.type.underscore}")
     end
+    column :state do |i|
+    	i.color_state
+    end
     column :title
+    column :acquire_range do |i|
+    	"#{i.acquire_from}<br/>#{i.acquire_to}".html_safe
+    end
+    column :remain do |i|
+    	"#{i.remain}<br/>总#{i.total}".html_safe
+    end    
     actions :defaults=>true do |i|
-    	[
+    	links = [
     		link_to('设定器', setting_card_tpl_path(i)),
     		link_to('权限', permission_card_tpl_path(i)),
 	    	link_to('报表', report_card_tpl_path(i)),
-	    	link_to('暂停', pause_card_tpl_path(i))
-	    ].join(' ').html_safe
+	    	# link_to('暂停', pause_card_tpl_path(i)),
+	    ]
+	    links.push(link_to(I18n.t('helpers.submit.activate'), activate_card_tpl_path(i))) if i.can_activate?
+	    links.push(link_to(I18n.t('helpers.submit.deactivate'), deactivate_card_tpl_path(i))) if i.can_deactivate?
+	    links.push(link_to(I18n.t('helpers.submit.pause'), pause_card_tpl_path(i))) if i.can_pause?
+	    links.join(' ').html_safe
     end
 	end
 
 	filter :id
-	filter :type
+	filter :type, :as=>:select, :collection=>CardTpl::Type
 	filter :title
-	filter :status
+	filter :state, :as=>:select, :collection=>CardTpl::State
 end

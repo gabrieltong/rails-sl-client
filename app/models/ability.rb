@@ -11,7 +11,7 @@ class Ability
     can :manage, Shop
     can :manage, ClientManager
     # can [:create,:update], CardTpl
-    can [:permission], CardTpl
+    can [:permission, :activate, :deactivate, :pause], CardTpl
     can [:create,:update,:setting], CardATpl
     can [:create,:update,:setting], CardBTpl
     # Define abilities for the passed in user here. For example:
