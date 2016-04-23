@@ -1,16 +1,16 @@
 ActiveAdmin.register CardBTpl do
-	menu false
-	permit_params :website, :title, :cover, :share_cover, :short_desc, :guide_cover, :desc, :intro, :draw_type, :prediction,
-	:person_limit, :acquire_from, :acquire_to, :change_remain, :_from, :allow_share, :public,
+  menu false
+  permit_params :website, :title, :cover, :share_cover, :short_desc, :guide_cover, :desc, :intro, :draw_type, :prediction,
+  :person_limit, :acquire_from, :acquire_to, :change_remain, :_from, :allow_share, :public,
   :group_ids=>[], :images_attributes=>[:id, :file, :_destroy], :draw_awards_attributes=>[:id, :title, :award_id, :number], :acquire_use_weeks=>[]
-	# permit_params 
-	scope_to :current_client, :association_method=>:card_b_tpls
+  # permit_params
+  scope_to :current_client, :association_method=>:card_b_tpls
 
-	controller do 
-		def index
-			redirect_to card_tpls_path(:scope=>:b)
-		end
-	end
+  controller do
+    def index
+      redirect_to card_tpls_path(:scope=>:b)
+    end
+  end
 
   member_action :setting, :method=>[:get, :patch] do 
     if request.get?
@@ -39,7 +39,7 @@ ActiveAdmin.register CardBTpl do
     link_to '权限', permission_card_b_tpl_path(resource)
   end
 
-	sidebar '投放数量变化', :only=>[:setting] do 
+  sidebar '投放数量变化', :only=>[:setting] do
     table_for resource.quantities.order('id desc'), :class=>'index index_table' do 
       column :number
       column :created_at
@@ -47,10 +47,10 @@ ActiveAdmin.register CardBTpl do
     end
   end
 
-	form do |f|
-		f.semantic_errors *f.object.errors.keys
+  form do |f|
+    f.semantic_errors *f.object.errors.keys
 
-		f.inputs I18n.t(:detail) do
+    f.inputs I18n.t(:detail) do
       f.input :title, :hint=>"建议添加优惠券提供的服务或商品名称，描述卡券提供的具体优惠"
       f.input :cover, :hint=>"图片建议尺寸640像素*200像素，大小不超过512kb <br/> #{thumb(f.object, :cover)}".html_safe
       f.input :share_cover, :hint=>"图片建议尺寸140像素*140像素，大小不超过200kb <br/> #{thumb(f.object, :share_cover)}".html_safe
@@ -62,11 +62,11 @@ ActiveAdmin.register CardBTpl do
     # end
 
     f.inputs '抽奖详情' do
-    	f.input :draw_type, :as=>:radio, :collection=>CardBTpl::DrawType
-    	f.input :desc, :as=>:text, :input_html=>{:rows=>5}, :hint=>'长度不超过300个汉字'
-    	f.input :intro, :as=>:text, :input_html=>{:rows=>5}, :hint=>'长度不超过300个汉字'
-    	f.input :website, :hint=>'可填写商家更多详细信息页面网址'
-    	f.input :guide_cover, :hint=>"图片建议宽度960像素，大小不超过512kb <br/> #{thumb(f.object, :guide_cover)}".html_safe
+      f.input :draw_type, :as=>:radio, :collection=>CardBTpl::DrawType
+      f.input :desc, :as=>:text, :input_html=>{:rows=>5}, :hint=>'长度不超过300个汉字'
+      f.input :intro, :as=>:text, :input_html=>{:rows=>5}, :hint=>'长度不超过300个汉字'
+      f.input :website, :hint=>'可填写商家更多详细信息页面网址'
+      f.input :guide_cover, :hint=>"图片建议宽度960像素，大小不超过512kb <br/> #{thumb(f.object, :guide_cover)}".html_safe
     end	
 
     # f.has_many :images do |item|
@@ -93,40 +93,40 @@ ActiveAdmin.register CardBTpl do
     end
 
     f.actions		
-	end	
+  end
 
 
-	show do
-		panel I18n.t(:detail) do
-			attributes_table_for resource do
-				row :title
-				thumb_row :cover
-				thumb_row :share_cover
-				row :short_desc
-			end
-		end
+  show do
+    panel I18n.t(:detail) do
+      attributes_table_for resource do
+        row :title
+        thumb_row :cover
+        thumb_row :share_cover
+        row :short_desc
+      end
+    end
 
-		panel '抽奖详情' do
-			attributes_table_for resource do
-	    	row :draw_type do 
-	    		I18n.t("draw_type.#{resource.draw_type}")
-	    	end
-	    	row :desc
-	    	row :intro
-	    	row :website
-	    	thumb_row :guide_cover
-	    end
+    panel '抽奖详情' do
+      attributes_table_for resource do
+        row :draw_type do
+          I18n.t("draw_type.#{resource.draw_type}")
+        end
+        row :desc
+        row :intro
+        row :website
+        thumb_row :guide_cover
+      end
     end
 
     panel '图片展示' do
       table do
-      	tr do
-      		resource.images.each do |i|
-      		td do 
-        		thumb(i, :file)
-      		end
-      		end
-      	end
+        tr do
+          resource.images.each do |i|
+          td do
+            thumb(i, :file)
+          end
+          end
+        end
       end
     end	
 
@@ -137,8 +137,8 @@ ActiveAdmin.register CardBTpl do
         column :number
       end
       attributes_table_for resource do
-	    	row :prediction
-	    end
+        row :prediction
+      end
     end	
-	end
+  end
 end

@@ -1,15 +1,15 @@
 ActiveAdmin.register CardATpl do
-	menu false
-	permit_params :website, :title, :indate_type, :indate_from, :indate_to, :indate_after, :indate_today, :cover, :share_cover, :short_desc, 
+  menu false
+  permit_params :website, :title, :indate_type, :indate_from, :indate_to, :indate_after, :indate_today, :cover, :share_cover, :short_desc,
   :guide_cover, :desc, :intro, :person_limit, :acquire_from, :acquire_to, :change_remain, :_from, :allow_share, :public,
   :group_ids=>[], :check_use_weeks=>[], :acquire_use_weeks=>[], :use_hours=>[], :images_attributes=>[:id, :file, :_destroy], :shop_ids=>[], :periods_attributes=>[:id, :from, :to, :number, :person_limit, :_destroy]
-	# permit_params 
-	scope_to :current_client, :association_method=>:card_a_tpls
+  # permit_params
+  scope_to :current_client, :association_method=>:card_a_tpls
 
-	controller do 
-		def index
-			redirect_to card_tpls_path(:scope=>:a)
-		end
+  controller do
+    def index
+      redirect_to card_tpls_path(:scope=>:a)
+    end
 
     # def update
     #   update! do
@@ -31,7 +31,7 @@ ActiveAdmin.register CardATpl do
     #     end
     #   end
     # end
-	end
+  end
 
   member_action :setting, :method=>[:get, :patch] do 
     if request.get?
@@ -81,10 +81,10 @@ ActiveAdmin.register CardATpl do
     end
   end
 
-	form do |f|
-		f.semantic_errors *f.object.errors.keys
+  form do |f|
+    f.semantic_errors *f.object.errors.keys
 
-		f.inputs I18n.t(:detail) do
+    f.inputs I18n.t(:detail) do
       f.input :title, :hint=>"建议添加优惠券提供的服务或商品名称，描述卡券提供的具体优惠"
       f.input :indate_type, :collection=>CardATpl::IndateType, :as=>:radio
       f.input :indate_from , as: :date_time_picker, datepicker_options: { min_date: "2013-10-8",        max_date: "+3D" }, :hint=>'请选择日期/时间'
@@ -104,10 +104,10 @@ ActiveAdmin.register CardATpl do
     # end
 
     f.inputs '优惠详情' do
-    	f.input :desc, :as=>:text, :input_html=>{:rows=>5}, :hint=>'长度不超过300个汉字'
-    	f.input :intro, :as=>:text, :input_html=>{:rows=>5}, :hint=>'长度不超过300个汉字'
-    	f.input :website, :hint=>'可填写商家更多详细信息页面网址'
-    	f.input :guide_cover, :hint=>"图片建议宽度960像素，大小不超过512kb <br/> #{thumb(f.object, :guide_cover)}".html_safe
+      f.input :desc, :as=>:text, :input_html=>{:rows=>5}, :hint=>'长度不超过300个汉字'
+      f.input :intro, :as=>:text, :input_html=>{:rows=>5}, :hint=>'长度不超过300个汉字'
+      f.input :website, :hint=>'可填写商家更多详细信息页面网址'
+      f.input :guide_cover, :hint=>"图片建议宽度960像素，大小不超过512kb <br/> #{thumb(f.object, :guide_cover)}".html_safe
     end	
 
     # f.has_many :images do |item|
@@ -123,7 +123,7 @@ ActiveAdmin.register CardATpl do
     end
 
     f.actions
-	end	
+  end
 
 
   show do

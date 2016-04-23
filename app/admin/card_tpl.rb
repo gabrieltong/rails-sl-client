@@ -11,82 +11,82 @@ ActiveAdmin.register CardTpl do
   scope :b
 
   controller do 
-		def create
-			redirect_to card_tpls_path
-		end
+    def create
+      redirect_to card_tpls_path
+    end
 
-		def edit
-			if resource.is_a? CardATpl
-				redirect_to edit_card_a_tpl_path(resource)
-			end
+    def edit
+      if resource.is_a? CardATpl
+        redirect_to edit_card_a_tpl_path(resource)
+      end
 
-			if resource.is_a? CardBTpl
-				redirect_to edit_card_b_tpl_path(resource)
-			end
-		end
+      if resource.is_a? CardBTpl
+        redirect_to edit_card_b_tpl_path(resource)
+      end
+    end
 
-		def show
-			if resource.is_a? CardATpl
-				redirect_to card_a_tpl_path(resource)
-			end
+    def show
+      if resource.is_a? CardATpl
+        redirect_to card_a_tpl_path(resource)
+      end
 
-			if resource.is_a? CardBTpl
-				redirect_to card_b_tpl_path(resource)
-			end
-		end
+      if resource.is_a? CardBTpl
+        redirect_to card_b_tpl_path(resource)
+      end
+    end
 
-	end
+  end
 
-	member_action :setting do 
-		if resource.is_a? CardATpl
-			redirect_to setting_card_a_tpl_path(resource)
-		end
+  member_action :setting do
+    if resource.is_a? CardATpl
+      redirect_to setting_card_a_tpl_path(resource)
+    end
 
-		if resource.is_a? CardBTpl
-			redirect_to setting_card_b_tpl_path(resource)
-		end		
-	end
+    if resource.is_a? CardBTpl
+      redirect_to setting_card_b_tpl_path(resource)
+    end
+  end
 
-	member_action :permission do 
-		if resource.is_a? CardATpl
-			redirect_to permission_card_a_tpl_path(resource)
-		end
+  member_action :permission do
+    if resource.is_a? CardATpl
+      redirect_to permission_card_a_tpl_path(resource)
+    end
 
-		if resource.is_a? CardBTpl
-			redirect_to permission_card_b_tpl_path(resource)
-		end
-	end
+    if resource.is_a? CardBTpl
+      redirect_to permission_card_b_tpl_path(resource)
+    end
+  end
 
-	member_action :report do 
+  member_action :report do
 
-	end
+  end
 
-	member_action :activate do
-		resource.activate if resource.can_activate?
-		if request.get?
-			redirect_to card_tpls_path
-		else
-			render :json=>{}
-		end
-	end
+  member_action :activate do
+    resource.activate if resource.can_activate?
+    if request.get?
+      redirect_to card_tpls_path
+    else
+      render :json=>{}
+    end
+  end
 
-	member_action :pause do
-		resource.pause if resource.can_pause?
-		if request.get?
-			redirect_to card_tpls_path
-		else
-			render :json=>{}
-		end
-	end
+  member_action :pause do
+    resource.pause if resource.can_pause?
+    if request.get?
+      redirect_to card_tpls_path
+    else
+      render :json=>{}
+    end
+  end
 
-	member_action :deactivate do
-		resource.deactivate if resource.can_deactivate?
-		if request.get?
-			redirect_to card_tpls_path
-		else
-			render :json=>{}
-		end
-	end
+  member_action :deactivate do
+    resource.deactivate if resource.can_deactivate?
+    if request.get?
+      redirect_to card_tpls_path
+    else
+      render :json=>{}
+    end
+  end
 
 
 # See permitted parameters documentation:
@@ -112,39 +112,39 @@ ActiveAdmin.register CardTpl do
     link_to I18n.t('active_admin.new_model', model: CardBTpl.model_name.human), new_card_b_tpl_path
   end
 
-	index do 
-		selectable_column
+  index do
+    selectable_column
     id_column
     column :client_id
     column :type do |i|
-    	I18n.t("activerecord.models.#{i.type.underscore}")
+      I18n.t("activerecord.models.#{i.type.underscore}")
     end
     column :state do |i|
-    	i.color_state
+      i.color_state
     end
     column :title
     column :acquire_range do |i|
-    	"#{i.acquire_from}<br/>#{i.acquire_to}".html_safe
+      "#{i.acquire_from}<br/>#{i.acquire_to}".html_safe
     end
     column :remain do |i|
-    	"#{i.remain}<br/>总#{i.total}".html_safe
+      "#{i.remain}<br/>总#{i.total}".html_safe
     end    
     actions :defaults=>true do |i|
-    	links = [
-    		link_to('设定器', setting_card_tpl_path(i)),
-    		link_to('权限', permission_card_tpl_path(i)),
-	    	link_to('报表', report_card_tpl_path(i)),
-	    	# link_to('暂停', pause_card_tpl_path(i)),
-	    ]
-	    links.push(link_to(I18n.t('helpers.submit.activate'), activate_card_tpl_path(i))) if i.can_activate?
-	    links.push(link_to(I18n.t('helpers.submit.deactivate'), deactivate_card_tpl_path(i))) if i.can_deactivate?
-	    links.push(link_to(I18n.t('helpers.submit.pause'), pause_card_tpl_path(i))) if i.can_pause?
-	    links.join(' ').html_safe
+      links = [
+        link_to('设定器', setting_card_tpl_path(i)),
+        link_to('权限', permission_card_tpl_path(i)),
+        link_to('报表', report_card_tpl_path(i)),
+        # link_to('暂停', pause_card_tpl_path(i)),
+      ]
+      links.push(link_to(I18n.t('helpers.submit.activate'), activate_card_tpl_path(i))) if i.can_activate?
+      links.push(link_to(I18n.t('helpers.submit.deactivate'), deactivate_card_tpl_path(i))) if i.can_deactivate?
+      links.push(link_to(I18n.t('helpers.submit.pause'), pause_card_tpl_path(i))) if i.can_pause?
+      links.join(' ').html_safe
     end
-	end
+  end
 
-	filter :id
-	filter :type, :as=>:select, :collection=>CardTpl::Type
-	filter :title
-	filter :state, :as=>:select, :collection=>CardTpl::State
+  filter :id
+  filter :type, :as=>:select, :collection=>CardTpl::Type
+  filter :title
+  filter :state, :as=>:select, :collection=>CardTpl::State
 end

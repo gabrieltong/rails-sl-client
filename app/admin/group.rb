@@ -1,7 +1,7 @@
 ActiveAdmin.register Group do
-	# menu :priority=>20 
+  # menu :priority=>20
   menu false
-	permit_params Group.permit_params
+  permit_params Group.permit_params
   scope_to :current_client, :association_method=>:groups
 # See permitted parameters documentation:
 # https://github.com/activeadmin/activeadmin/blob/master/docs/2-resource-customization.md#setting-up-strong-parameters
@@ -16,7 +16,7 @@ ActiveAdmin.register Group do
 #   permitted
 # end
 
-	controller do
+  controller do
     belongs_to :client, optional: true
   end
 
@@ -25,7 +25,7 @@ ActiveAdmin.register Group do
     redirect_to request.referer, notice: "设置默认成功"
   end
 
-	form do |f|
+  form do |f|
     f.inputs I18n.t(:detail) do
       f.input :title
       f.input :position
@@ -60,9 +60,9 @@ ActiveAdmin.register Group do
     end
   end  
 
-	filter :title
-	filter :position
-	filter :default
-	filter :active      
-	filter :desc
+  filter :title
+  filter :position
+  filter :default
+  filter :active
+  filter :desc
 end
