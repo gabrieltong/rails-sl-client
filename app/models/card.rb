@@ -21,16 +21,21 @@ class Card < ActiveRecord::Base
   validates :phone, :presence => true, :if=>'!acquired_at.nil?'
 
   before_validation do |record|
-    record.generate_code
+    if code.blank?
+      record.generate_code
+    end
   end
 
   before_create do |record|
+    if code.blank?
+      record.generate_code
+    end
     record.generate_type
   end
 
-  def self.default_scope
-    where type: [:CardB,:CardA]
-  end
+  # def self.default_scope
+  #   where type: [:CardB,:CardA]
+  # end
 
   def self.inheritance_column
     'type'
@@ -50,6 +55,13 @@ class Card < ActiveRecord::Base
 
     if card_tpl.is_a? CardBTpl
       self.type = :CardB
+    end
+  end
+
+  def self.generate_depot(number = 10**6)
+    number.times do
+      card = Card.new
+      card.save :validate=>false  
     end
   end
 end

@@ -33,4 +33,12 @@ class Quantity < ActiveRecord::Base
       end
     end
   end
+
+  def generate_cards_sql
+    10.times do 
+      sql = "insert into cards (card_tpl_id, added_quantity_id, created_at, updated_at, code) 
+      (SELECT #{card_tpl_id}, #{id}, NOW(), NOW(), FLOOR(10 + RAND() * 10) AS random_number FROM cards WHERE 'random_number' NOT IN (SELECT code FROM `cards`) LIMIT 1)"
+      ActiveRecord::Base.connection.execute sql
+    end
+  end
 end

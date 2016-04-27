@@ -2,7 +2,7 @@ ActiveAdmin.register CardATpl do
   menu false
   permit_params :website, :title, :indate_type, :indate_from, :indate_to, :indate_after, :indate_today, :cover, :share_cover, :short_desc,
   :guide_cover, :desc, :intro, :person_limit, :acquire_from, :acquire_to, :change_remain, :_from, :allow_share, :public,
-  :group_ids=>[], :check_use_weeks=>[], :acquire_use_weeks=>[], :use_hours=>[], :images_attributes=>[:id, :file, :_destroy], :shop_ids=>[], :periods_attributes=>[:id, :from, :to, :number, :person_limit, :_destroy]
+  :group_ids=>[], :check_weeks=>[], :acquire_weeks=>[], :check_hours=>[], :images_attributes=>[:id, :file, :_destroy], :shop_ids=>[], :periods_attributes=>[:id, :from, :to, :number, :person_limit, :_destroy]
   # permit_params
   scope_to :current_client, :association_method=>:card_a_tpls
 
@@ -91,8 +91,8 @@ ActiveAdmin.register CardATpl do
       f.input :indate_to , as: :date_time_picker, datepicker_options: { min_date: "2013-10-8",        max_date: "+3D" }, :hint=>'请选择日期/时间'
       f.input :indate_after, :hint=>'领取后，多少天内有效'
       f.input :indate_today, :hint=>'勾选此项后，从领取次日计算有效期，否则从当日0点开始计时'
-      f.input :check_use_weeks, :collection=>CardTpl::UseWeeks, :as=>:check_boxes
-      f.input :use_hours, :collection=>CardTpl::UseHours, :as=>:check_boxes
+      f.input :check_weeks, :collection=>CardTpl::UseWeeks, :as=>:check_boxes
+      f.input :check_hours, :collection=>CardTpl::UseHours, :as=>:check_boxes
       f.input :cover, :hint=>"图片建议尺寸640像素*200像素，大小不超过512kb <br/> #{thumb(f.object, :cover)}".html_safe
       f.input :share_cover, :hint=>"图片建议尺寸140像素*140像素，大小不超过200kb <br/> #{thumb(f.object, :share_cover)}".html_safe
       f.input :short_desc, :as=>:string, :hint=>'简单描述提供的优惠或特色服务，吸引消费者。长度不超过30个汉字'
@@ -139,11 +139,11 @@ ActiveAdmin.register CardATpl do
           row :indate_after
           shifou_row :indate_today
         end
-        row :check_use_weeks do 
-          resource.check_use_weeks.reject {|i|i.blank?}.map {|i|I18n.t("check_use_weeks.#{i}")}.join(', ')
+        row :check_weeks do 
+          resource.check_weeks.reject {|i|i.blank?}.map {|i|I18n.t("check_weeks.#{i}")}.join(', ')
         end
-        row :use_hours do 
-          resource.use_hours.reject {|i|i.blank?}.map {|i|I18n.t("use_hours.#{i}")}.join(', ')
+        row :check_hours do 
+          resource.check_hours.reject {|i|i.blank?}.map {|i|I18n.t("check_hours.#{i}")}.join(', ')
         end
         thumb_row :cover
         thumb_row :share_cover

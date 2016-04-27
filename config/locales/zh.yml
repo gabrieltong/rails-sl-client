@@ -9,54 +9,54 @@
       paused: '已暂停'
   update_success: '更新成功'
   use_weeks:
-    mon: '周一'
-    thu: '周二'
-    wed: '周三'
-    thr: '周四'
-    fri: '周五'
-    sta: '周六'
-    sun: '周日'
-  check_use_weeks:
-    mon: '周一'
-    thu: '周二'
-    wed: '周三'
-    thr: '周四'
-    fri: '周五'
-    sta: '周六'
-    sun: '周日'
-  acquire_use_weeks:
-    mon: '周一'
-    thu: '周二'
-    wed: '周三'
-    thr: '周四'
-    fri: '周五'
-    sta: '周六'
-    sun: '周日'    
-  use_hours:
-    h1: "0点~1点"
-    h2: "1点~2点"
-    h3: "2点~3点"
-    h4: "3点~4点"
-    h5: "4点~5点"
-    h6: "5点~6点"
-    h7: "6点~7点"
-    h8: "7点~8点"
-    h9: "8点~9点"
-    h10: "9点~10点"
-    h11: "10点~11点"
-    h12: "11点~12点"
-    h13: "12点~13点"
-    h14: "13点~14点"
-    h15: "14点~15点"
-    h16: "15点~16点"
-    h17: "16点~17点"
-    h18: "17点~18点"
-    h19: "18点~19点"
-    h20: "19点~20点"
-    h21: "20点~21点"
-    h22: "21点~22点"
-    h23: "22点~23点"
-    h24: "23点~24点"
+    monday: '周一'
+    tuesday: '周二'
+    wednesday: '周三'
+    thursday: '周四'
+    friday: '周五'
+    saturday: '周六'
+    sunday: '周日'
+  check_weeks:
+    monday: '周一'
+    tuesday: '周二'
+    wednesday: '周三'
+    thursday: '周四'
+    friday: '周五'
+    saturday: '周六'
+    sunday: '周日'
+  acquire_weeks:
+    monday: '周一'
+    tuesday: '周二'
+    wednesday: '周三'
+    thursday: '周四'
+    friday: '周五'
+    saturday: '周六'
+    sunday: '周日'
+  check_hours:
+    h0: "0点~1点"
+    h1: "1点~2点"
+    h2: "2点~3点"
+    h3: "3点~4点"
+    h4: "4点~5点"
+    h5: "5点~6点"
+    h6: "6点~7点"
+    h7: "7点~8点"
+    h8: "8点~9点"
+    h9: "9点~10点"
+    h10: "10点~11点"
+    h11: "11点~12点"
+    h12: "12点~13点"
+    h13: "13点~14点"
+    h14: "14点~15点"
+    h15: "15点~16点"
+    h16: "16点~17点"
+    h17: "17点~18点"
+    h18: "18点~19点"
+    h19: "19点~20点"
+    h20: "20点~21点"
+    h21: "21点~22点"
+    h22: "22点~23点"
+    h23: "23点~24点"
   indate_type:
     fixed: '固定期限'
     dynamic: '动态期限'
@@ -333,10 +333,10 @@
         prediction: '预计参与人数'
         shops: '门店'
         use_weeks_zh: '可用时段'
-        use_hours_zh: ''
-        check_use_weeks: '可用时段'
-        acquire_use_weeks: '投放时段'
-        use_hours: ''
+        check_hours_zh: ''
+        check_weeks: '可用时段'
+        acquire_weeks: '投放时段'
+        check_hours: ''
         use_periods: '可用时段'
         fixed: '固定期限'
         dynamic: '动态期限'

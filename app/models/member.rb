@@ -1,3 +1,4 @@
+# encoding: UTF-8
 class Member < ActiveRecord::Base
   attr_accessor :name,:sex,:borded_at,:pic,:address,:email, :client_id
   # Include default devise modules. Others available are:
@@ -12,14 +13,20 @@ class Member < ActiveRecord::Base
   validates :phone, :presence=>true, :uniqueness=>true
   validates_datetime :borded_at, :allow_nil=>true
 
-  has_many :managed_clients, :class_name=>Client, :foreign_key=>:admin_phone, :primary_key=>:phone
+  has_many :managed_clients, ->{where(:client_managers=>{:admin=>1})}, :through=>:client_managers, :source=>:client#, :foreign_key=>:admin_phone, :primary_key=>:phone
   has_many :managed_members, :class_name=>Member, :through=>:managed_clients, :source=>:members
 
   has_many :client_members
   has_many :clients, :through=>:client_members
 
-  has_many :client_managers
+  has_many :client_managers, :foreign_key=>:phone, :primary_key=>:phone
   has_many :managed_shops, :through=>:client_managers, :source=>:shop
+
+  # 用户具有发卷权限的卡卷
+  has_many :sender_card_tpls, ->{where(:client_managers=>{:sender=>1}).uniq}, :through=>:managed_shops, :source=>:card_tpls
+
+  # 用户具有核销权限的卡卷
+  has_many :checker_card_tpls, ->{where(:client_managers=>{:checker=>1}).uniq}, :through=>:managed_shops, :source=>:card_tpls
 
   def self.permit_params
     [:phone, :username, :password, :password_confirmation]
@@ -53,5 +60,8 @@ class Member < ActiveRecord::Base
 
   def username
     name
+    remember_me!
+
+    rememberable_value
   end
 end

@@ -43,6 +43,7 @@ class Client < ActiveRecord::Base
   has_many :card_tpls
   has_many :card_a_tpls
   has_many :card_b_tpls
+  has_many :admins, ->{where(:client_managers=>{:admin=>1})}, :through=>:client_managers, :source=>:manager
   has_one :client_setting
 
   scope :sp, ->{where(:is_sp=>true)}
@@ -56,6 +57,14 @@ class Client < ActiveRecord::Base
     end
   end
 
+  def create_admin
+    p admins.where(:phone=>admin_phone).size
+    if admins.where(:phone=>admin_phone).size == 0 
+      cm = ClientManager.new(:client_id=>id, :admin=>1, :phone=>admin_phone, :name=>admin_phone)
+      cm.save
+      p cm.errors
+    end
+  end
 # 修改商户管理员时， 重新发送短信
   # after_save do |record|
   #   # record.generate_admin
@@ -87,48 +96,6 @@ class Client < ActiveRecord::Base
 
   def service_deadline
     "#{service_started}-#{service_ended_at}"
-  end
-
-  def msg_admin_create_config(admin_phone)
-    title = "#{self.title}的管理员"
-    code = "123456"
-    return {
-      'smsType'=>'normal',
-      'smsFreeSignName'=>'前站',
-      'smsParam'=>{code: code, product: '', item: title},
-      'recNum'=>admin_phone,
-      'smsTemplateCode'=>'SMS_2145923'
-    }
-  end
-
-  def msg_admin_delete_config(admin_phone)
-    title = "#{self.title}的管理员"
-    code = "123456"
-    return {
-      'smsType'=>'normal',
-      'smsFreeSignName'=>'前站',
-      'smsParam'=>"{'code':'#{code}','product'=>'','item'=>'#{title}'}",
-      'recNum'=>admin_phone,
-      'smsTemplateCode'=>'SMS_2145923'
-    }
-  end
-
-# 管理员权限添加短信
-# TODO 添加对admin_phone的验证 ， 类似  PhoneValidator.validate(admin_phone)
-  def msg_admin_create(admin_phone)
-    if admin_phone
-      dy = Dayu.createByDayuable(self, msg_admin_create_config(admin_phone))
-      dy.run
-    end
-  end
-
-# 管理员权限取消短信
-# TODO 添加对admin_phone的验证 ， 类似  PhoneValidator.validate(admin_phone)
-  def msg_admin_delete(admin_phone)
-    if admin_phone
-      dy = Dayu.createByDayuable(self, msg_admin_delete_config(admin_phone))
-      dy.run
-    end
   end
 
   def generate_admin

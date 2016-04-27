@@ -13,7 +13,7 @@ active_admin_form_for resource, :url=>setting_card_b_tpl_path(resource) do |f|
   f.inputs '定时' do
     f.input :acquire_from, as: :date_time_picker
     f.input :acquire_to, as: :date_time_picker
-    f.input :acquire_use_weeks, :collection=>CardTpl::UseWeeks, :as=>:check_boxes
+    f.input :acquire_weeks, :collection=>CardTpl::UseWeeks, :as=>:check_boxes
 
     f.has_many :periods, heading: false, allow_destroy: true do |f2|
       f2.input :from, as: :date_time_picker, datepicker_options: { datepicker:false, format: 'H:i' }
