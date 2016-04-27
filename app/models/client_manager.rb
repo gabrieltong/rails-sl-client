@@ -2,6 +2,7 @@ class ClientManager < ActiveRecord::Base
   belongs_to :client
   belongs_to :shop
   belongs_to :manager, :class_name=>:Member, :foreign_key=>:phone, :primary_key=>:phone
+  has_many :dayus, :as=>:dayuable
 
   scope :admin, ->{where(:admin=>true)}
   scope :sender, ->{where(:sender=>true)}
@@ -9,6 +10,10 @@ class ClientManager < ActiveRecord::Base
 
   validates :phone, :name, :client_id, :presence=>true
   validates :shop_id, :presence=>true, :if=>'admin != true' 
+
+  after_create do |record|
+    record.msg_admin_create
+  end
 
   def self.permit_params
     [:phone, :name, :shop_id, :admin, :checker, :sender]
@@ -41,7 +46,7 @@ class ClientManager < ActiveRecord::Base
 # 管理员权限添加短信
 # TODO 添加对admin_phone的验证 ， 类似  PhoneValidator.validate(admin_phone)
   def msg_admin_create
-    if self.class.admin.exists? self and Dayu.allow_send(self) === true
+    if self.class.admin.exists?(self.id) and Dayu.allow_send(self) === true
       dy = Dayu.createByDayuable(self, msg_admin_create_config)
       dy.run
     end

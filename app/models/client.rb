@@ -51,18 +51,14 @@ class Client < ActiveRecord::Base
 
   acts_as_taggable_on :tag
 
-  after_create do |record|
-    if record.admin_phone
-      msg_admin_create(record.admin_phone)
-    end
+  after_save do |record|
+    create_admin
   end
 
   def create_admin
-    p admins.where(:phone=>admin_phone).size
     if admins.where(:phone=>admin_phone).size == 0 
       cm = ClientManager.new(:client_id=>id, :admin=>1, :phone=>admin_phone, :name=>admin_phone)
       cm.save
-      p cm.errors
     end
   end
 # 修改商户管理员时， 重新发送短信

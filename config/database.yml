@@ -17,10 +17,6 @@ default: &default
   password:
   socket: /tmp/mysql.sock
 
-stagging:
-  <<: *default
-  database: rails-sl_development
-
 development:
   <<: *default
   database: rails-sl_development
