@@ -47,12 +47,12 @@ class Card < ActiveRecord::Base
   validates :removed_quantity_id, :presence => true, :if=>'!deleted_at.nil?'
   validates :phone, :presence => true, :if=>'!acquired_at.nil?'
 
+  before_validation do |record|
+    record.generate_type
+  end
+  
   before_save do |record|
     record.generate_locked_info
-  end
-
-  before_create do |record|
-    record.generate_type
   end
 
   def self.inheritance_column

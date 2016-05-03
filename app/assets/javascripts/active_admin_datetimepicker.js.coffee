@@ -12,7 +12,6 @@
   entries = $(container).find('input.date-time-picker')
   entries.each (index, entry) ->
     options = $(entry).data 'datepicker-options'
-    console.log options
     $(entry).datetimepicker $.extend(defaults, options)
 
 $ ->

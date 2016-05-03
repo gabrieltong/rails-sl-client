@@ -6,7 +6,7 @@ class CardA < Card
     record.generate_code
   end
   
-  before_create do |record|
+  after_create do |record|
     record.generate_code
   end
 

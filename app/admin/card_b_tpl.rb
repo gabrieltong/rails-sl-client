@@ -85,7 +85,7 @@ ActiveAdmin.register CardBTpl do
       # , heading: 'Themes', allow_destroy: true, new_record: true
       f.has_many :draw_awards, heading: false, allow_destroy: true do |d_f|
         d_f.input :title
-        d_f.input :award, :collection=>Client.find(session[:current_client_id]).card_a_tpls
+        d_f.input :award_tpl, :collection=>Client.find(session[:current_client_id]).card_a_tpls
         d_f.input :number
       end
 
