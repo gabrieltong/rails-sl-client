@@ -20,11 +20,14 @@ class Card < ActiveRecord::Base
   scope :sended_by, ->(phone){where(:sender_phone=>phone)}
   scope :checked_by, ->(phone){where(:checker_phone=>phone)}
   scope :locked_by, ->(card_id){where(:locked_by_id=>card_id)}
+  scope :locked_by_tpl, ->(card_tpl_id){where(:locked_by_tpl_id=>card_tpl_id)}
 
+  scope :has_locked, ->{where.not(:locked_id=>nil)}
   scope :locked, ->{where.not(:locked_by_id=>nil)}
   scope :acquired, ->{where.not(:acquired_at=>nil)}
   scope :checked, ->{where.not(:checked_at=>nil)}
 
+  scope :locked_none, ->{where(:locked_id=>nil)}
   scope :not_locked, ->{where(:locked_by_id=>nil)}
   scope :not_acquired, ->{where(:acquired_at=>nil)}
   scope :not_checked, ->{where(:checked_at=>nil)}
@@ -38,22 +41,17 @@ class Card < ActiveRecord::Base
 
   scope :acquirable, ->{where(:acquired_at=>nil, :locked_by_id=>nil)}
 
-  validates :card_tpl_id, :code, :added_quantity_id, :presence=>true
-  validates :code, :uniqueness=>true
-  # validates :type, :inclusion => %w(CardA CardB)
+  validates :card_tpl_id, :added_quantity_id, :presence=>true
+  
+  validates :type, :inclusion => %w(CardA CardB)
   validates :removed_quantity_id, :presence => true, :if=>'!deleted_at.nil?'
   validates :phone, :presence => true, :if=>'!acquired_at.nil?'
 
-  before_validation do |record|
-    if code.blank?
-      record.generate_code
-    end
+  before_save do |record|
+    record.generate_locked_info
   end
 
   before_create do |record|
-    if code.blank?
-      record.generate_code
-    end
     record.generate_type
   end
 
@@ -61,13 +59,18 @@ class Card < ActiveRecord::Base
     'type'
   end
 
-  def generate_code
-    self.code = loop do
-      random_code = rand(100000000000...999999999999)
-      break random_code unless self.class.exists?(code: random_code)
+# 冗余：locked_id, locked_tpl_id
+  def generate_locked_info
+    # 为被绑定的卡卷生成冗余
+    if locked_by_card
+      self.locked_by_tpl_id = locked_by_card.card_tpl_id
+    end
+    # 为绑定其他卡卷的卡卷生成冗余
+    if locked_card
+      self.locked_id = locked_card.id
+      self.locked_tpl_id = locked_card.card_tpl_id
     end
   end
-
 # 为卡密生成正确类型
   def generate_type
     if card_tpl.is_a? CardATpl
@@ -97,7 +100,7 @@ class Card < ActiveRecord::Base
 # 卡卷模板未下架 scope card_tpl.active or card_tpl.paused
 # 当前时间在可核销时间内 hour in use_hours 
 # 当前天(周1，2，3，4，5，6，7）在可核销cwday内 : cwday in use_weeks
-# 使用乐观锁 
+# 使用乐观锁
 # 有可能需要验证码有效期 
 # 判断能否核销
   def can_check?
@@ -110,7 +113,7 @@ class Card < ActiveRecord::Base
   end
 
   def send_check_capcha
-    if self.can_check? === true and Dayu.allow_send(self) === true
+    if self.can_check? === true and Dayu.allow_send(self, check_capcha_config['type']) === true
       self.capcha = rand(100000..999999)
       self.save
       dy = Dayu.createByDayuable(self, check_capcha_config)
@@ -123,6 +126,7 @@ class Card < ActiveRecord::Base
   def check_capcha_config
     title = "#{card_tpl.title}的验证码"
     return {
+      'type'=>'check',
       'smsType'=>'normal',
       'smsFreeSignName'=>'前站',
       'smsParam'=>{code: capcha, product: '', item: title},
