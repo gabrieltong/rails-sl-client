@@ -2,7 +2,7 @@ ActiveAdmin.register CardBTpl do
   menu false
   permit_params :website, :title, :cover, :share_cover, :short_desc, :guide_cover, :desc, :intro, :draw_type, :prediction,
   :person_limit, :acquire_from, :acquire_to, :change_remain, :_from, :allow_share, :public,
-  :group_ids=>[], :images_attributes=>[:id, :file, :_destroy], :draw_awards_attributes=>[:id, :title, :award_id, :number], :acquire_weeks=>[]
+  :group_ids=>[], :images_attributes=>[:id, :file, :_destroy], :draw_awards_attributes=>[:id, :title, :award_id, :number], :acquire_weeks=>[],:periods_attributes=>[:id, :from, :to, :number, :person_limit, :_destroy]
   # permit_params
   scope_to :current_client, :association_method=>:card_b_tpls
 
