@@ -73,6 +73,10 @@ ActiveAdmin.register CardATpl do
     link_to '权限', permission_card_a_tpl_path(resource)
   end
 
+  action_item :report, :only=>:show do 
+    link_to '报表', card_a_tpl_card_as_path(resource)
+  end
+
   sidebar '投放数量变化', :only=>[:setting] do 
     table_for resource.quantities.order('id desc'), :class=>'index index_table' do 
       column :number
@@ -87,8 +91,8 @@ ActiveAdmin.register CardATpl do
     f.inputs I18n.t(:detail) do
       f.input :title, :hint=>"建议添加优惠券提供的服务或商品名称，描述卡券提供的具体优惠"
       f.input :indate_type, :collection=>CardATpl::IndateType, :as=>:radio
-      f.input :indate_from , as: :date_time_picker, datepicker_options: { min_date: Date.today,        max_date: Date.today + 2.years }, :hint=>'请选择日期/时间'
-      f.input :indate_to , as: :date_time_picker, datepicker_options: { min_date: Date.today,        max_date: Date.today + 2.years }, :hint=>'请选择日期/时间'
+      f.input :indate_from , as: :date_time_picker, datepicker_options: { min_date: Date.today - 1.year,        max_date: Date.today + 2.years }, :hint=>'请选择日期/时间'
+      f.input :indate_to , as: :date_time_picker, datepicker_options: { min_date: Date.today - 1.year,        max_date: Date.today + 2.years }, :hint=>'请选择日期/时间'
       f.input :indate_after, :hint=>'领取后，多少天内有效'
       f.input :indate_today, :hint=>'勾选此项后，从领取次日计算有效期，否则从当日0点开始计时'
       f.input :check_weeks, :collection=>CardTpl::UseWeeks, :as=>:check_boxes

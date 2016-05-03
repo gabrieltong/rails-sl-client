@@ -9,6 +9,14 @@ Rails.application.routes.draw do
   #   end
   # end
 
+  resources :card_a_tpls do
+    resources :card_as
+  end
+
+  resources :card_b_tpls do
+    resources :card_bs
+  end  
+
   resources :clients do 
     resources :members
     resources :shops

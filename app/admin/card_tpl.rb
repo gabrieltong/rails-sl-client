@@ -58,7 +58,13 @@ ActiveAdmin.register CardTpl do
   end
 
   member_action :report do
+    if resource.is_a? CardATpl
+      redirect_to card_a_tpl_card_as_path(resource)
+    end
 
+    if resource.is_a? CardBTpl
+      redirect_to card_b_tpl_card_bs_path(resource)
+    end
   end
 
   member_action :activate do

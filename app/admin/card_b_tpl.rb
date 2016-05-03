@@ -39,6 +39,10 @@ ActiveAdmin.register CardBTpl do
     link_to '权限', permission_card_b_tpl_path(resource)
   end
 
+  action_item :report, :only=>:show do 
+    link_to '报表', card_b_tpl_card_bs_path(resource)
+  end
+
   sidebar '投放数量变化', :only=>[:setting] do
     table_for resource.quantities.order('id desc'), :class=>'index index_table' do 
       column :number
