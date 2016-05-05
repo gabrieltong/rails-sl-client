@@ -12,8 +12,8 @@ class Ability
     can :manage, ClientManager
     # can [:create,:update], CardTpl
     can [:permission, :activate, :deactivate, :pause, :report], CardTpl
-    can [:create,:update,:setting], CardATpl
-    can [:create,:update,:setting], CardBTpl
+    can [:create, :setting], CardATpl
+    can [:create, :setting], CardBTpl
     # Define abilities for the passed in user here. For example:
     #
     #   user ||= User.new # guest user (not logged in)

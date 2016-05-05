@@ -16,6 +16,7 @@ class Card < ActiveRecord::Base
 
   delegate 'can_check_by_phone?', :to=>:card_tpl
 
+  scope :by_client, ->(client_id){where(:client_id=>client_id)}
   scope :acquired_by, ->(phone){where(:phone=>phone)}
   scope :sended_by, ->(phone){where(:sender_phone=>phone)}
   scope :checked_by, ->(phone){where(:checker_phone=>phone)}
@@ -41,13 +42,17 @@ class Card < ActiveRecord::Base
   # 相当于 acquired.not_checked.active
   scope :checkable, ->{where(arel_table[:acquired_at].not_eq(nil)).where(arel_table[:checked_at].eq(nil)).where(arel_table[:from].lt(DateTime.now)).where(arel_table[:to].gt(DateTime.now))}
 
-  scope :acquirable, ->{where(:acquired_at=>nil, :locked_by_id=>nil)}
+  scope :acquirable, ->{where(:acquired_at=>nil, :locked_by_id=>nil).where(arel_table[:from].lt(DateTime.now)).where(arel_table[:to].gt(DateTime.now))}
+
+  scope :acquired_in_range, ->(from, to){where(arel_table[:acquired_at].gt(from)).where(arel_table[:acquired_at].lt(to))}
+  scope :checked_in_range, ->(from, to){where(arel_table[:checked_at].gt(from)).where(arel_table[:checked_at].lt(to))}
 
   validates :card_tpl_id, :added_quantity_id, :presence=>true
   
   validates :type, :inclusion => %w(CardA CardB)
   validates :removed_quantity_id, :presence => true, :if=>'!deleted_at.nil?'
   validates :phone, :presence => true, :if=>'!acquired_at.nil?'
+  validates :acquired_at, :presence => true, :if=>'!phone.nil?'
 
   before_validation do |record|
     record.generate_type
@@ -158,8 +163,8 @@ class Card < ActiveRecord::Base
     end
   end
 
-  def self.check(code, capcha, by_phone)
-    where_condition = {:code=>code, :capcha=>capcha}
+  def self.check(code, by_phone)
+    where_condition = {:code=>code}
     # 验证卡密是否存在
     card = self.where(where_condition).first
     if card
@@ -168,9 +173,9 @@ class Card < ActiveRecord::Base
       if can_check === true 
         can_check_by_phone = card.can_check_by_phone?(by_phone)
         # 验证用户权限
-        if can_check_by_phone === true 
+        if can_check_by_phone === true
           result = checkable.where(where_condition).limit(1).update_all(:checked_at=>DateTime.now,:checker_phone=>by_phone)
-          return result > 0  
+          return result > 0
         else
           return can_check_by_phone
         end
@@ -180,5 +185,28 @@ class Card < ActiveRecord::Base
     else
       return :no_record
     end
+  end
+
+  # 用户给参与用户发送卡券密码
+  def notify_acquired_phone
+
+    config = {
+      'type'=>__callee__,
+      'smsType'=>'normal',
+      'smsFreeSignName'=>'红券',
+      'smsParam'=>{product: client.title.to_s, item: card_tpl.title.to_s, code: code.to_s},
+      'recNum'=>phone,
+      'smsTemplateCode'=>'SMS_2165442'
+    }
+  
+    dy = Dayu.createByDayuable(self, config)
+    dy.run
+    dy.sended
+  end
+
+  def fix_card_tpl
+    client_id = added_quantity.client_id
+    save
+    p errors
   end
 end

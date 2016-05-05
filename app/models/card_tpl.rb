@@ -1,5 +1,7 @@
+# encoding: UTF-8
 class CardTpl < ActiveRecord::Base
   attr_accessor :change_remain
+  attr_accessor :member_cards_count
 
   State = { I18n.t('card_tpl.state.active')=>'active', I18n.t('card_tpl.state.inactive')=>'inactive', I18n.t('card_tpl.state.paused')=>'paused'}
   UseWeeks = {I18n.t("use_weeks.monday")=>'monday', I18n.t("use_weeks.tuesday")=>'tuesday', I18n.t("use_weeks.wednesday")=>'wednesday', I18n.t("use_weeks.thursday")=>'thursday', I18n.t("use_weeks.friday")=>'friday', I18n.t("use_weeks.saturday")=>'saturday', I18n.t("use_weeks.sunday")=>'sunday'}
@@ -116,10 +118,12 @@ class CardTpl < ActiveRecord::Base
           :week_not_acquirable
         elsif hour_can_acquire? != true
           :hour_not_acquirable
+        elsif period_card_can_acquire? != true
+          :period_card_limit_overflow
         elsif phone_can_acquire?(phone) != true
-          :person_limit_overflow
+          :phone_limit_overflow
         elsif period_phone_can_acquire?(phone)!= true
-          :period_person_limit_overflow
+          :period_phone_limit_overflow
         else
           true
         end
@@ -128,7 +132,7 @@ class CardTpl < ActiveRecord::Base
 
     state :paused do
       def can_check?
-        _can_check?
+        _can_check? number
       end
 
       def can_acquire?(phone)
@@ -145,6 +149,27 @@ class CardTpl < ActiveRecord::Base
     end
   end
 
+
+  def check phone, by_phone, number=1
+    if can_check? != true
+      can_check?
+    elsif cards.acquired_by(phone).checkable.size < number
+      :number_overflow
+    elsif can_check_by_phone? by_phone != true
+      :by_phone_no_permission
+    else
+      result = false
+      Card.transaction do
+        result = cards.acquired_by(phone).checkable.limit(number).update_all(:checked_at=>DateTime.now,:checker_phone=>by_phone)
+        if result != number
+          raise ActiveRecord::Rollback
+        end
+        client.create_activity key: 'card.check', owner: Member.find_by_phone(by_phone), recipient: self, :parameters=>{:phone=>phone, :by_phone=>by_phone, :number=>number,:type=>'核销',:msg=>"#{phone}被核销了#{number}张卡卷,操作员#{by_phone}"}
+      end
+      result
+    end
+  end
+
   def period_phone_can_acquire_count phone
     if period = period_now
       from = DateTime.now.change({ hour: period.from.hour, min: period.from.min, sec: 0 })
@@ -154,8 +179,21 @@ class CardTpl < ActiveRecord::Base
       period.person_limit - cards.acquired_by(phone).where(acquired_time_gt).where(acquired_time_lt).size
     else
       0
-    end    
+    end
   end
+
+  def period_card_can_acquire?
+    if period = period_now
+      from = DateTime.now.change({ hour: period.from.hour, min: period.from.min, sec: 0 })
+      to = DateTime.now.change({ hour: period.to.hour, min: period.to.min, sec: 0 })
+      acquired_time_gt = Card.arel_table[:acquired_at].gt(from)
+      acquired_time_lt = Card.arel_table[:acquired_at].lt(to)
+      period.number - cards.where(acquired_time_gt).where(acquired_time_lt).size
+    else
+      0
+    end
+  end
+
   # 验证用户
   def period_phone_can_acquire? phone
     period_phone_can_acquire_count(phone) > 0 
@@ -228,8 +266,19 @@ class CardTpl < ActiveRecord::Base
     if can_acquire === true
       can_send_by_phone = self.can_send_by_phone?(by_phone)
       if can_send_by_phone === true
-        result = cards.acquirable.limit(number).update_all(:phone=>phone, :acquired_at=>DateTime.now, :acquired_time=>DateTime.now.strftime("%H:%M"), :sender_phone=>by_phone)
-        return result 
+        result = false
+
+        Card.transaction do 
+          result = cards.acquirable.limit(number).update_all(:phone=>phone, :acquired_at=>DateTime.now, :acquired_time=>DateTime.now.strftime("%H:%M"), :sender_phone=>by_phone)
+          if result != number
+            raise ActiveRecord::Rollback
+          end
+          cards.acquired_by(phone).limit(number).order('id desc').each do |card|
+            card.notify_acquired_phone
+          end
+          client.create_activity key: 'card.acquire', owner: Member.find_by_phone(by_phone), recipient: self, :parameters=>{:phone=>phone, :by_phone=>by_phone, :number=>number,:type=>'发卷',:msg=>"#{phone}获得了#{number}张卡卷,操作员#{by_phone}"}
+        end
+        return result
       else
         return can_send_by_phone
       end
@@ -326,7 +375,7 @@ class CardTpl < ActiveRecord::Base
     elsif hour_can_check? != true
       return :hour_not_checkable
     else
-      return true
+      true
     end
   end
 
