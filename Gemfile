@@ -28,20 +28,30 @@ gem 'paperclip'
 gem 'cancan'
 gem "paranoia", "~> 2.0"
 gem 'acts-as-taggable-on', '~> 3.4'
+gem 'state_machine'
+gem 'draper'
+gem 'validates_timeliness'
+gem 'counter_culture'
 gem 'exception_notification'
 gem 'thin'
 gem 'roo', '~> 2.3.2'
-gem 'activeadmin'
-gem 'validates_timeliness'
-gem 'counter_culture'
-# Plus integrations with:
-gem 'devise',  '~> 3.2'
-gem 'draper'
+gem 'grape'
+gem 'grape-entity'
+gem 'grape_on_rails_routes'
+gem 'public_activity'
+gem 'dotenv-rails'
+gem 'activesupport-json_encoder'
+gem 'bulk_insert'
+gem 'will_paginate'
+gem 'randumb'
+
+gem 'devise'
+gem 'devise-i18n'
+
 gem 'activeadmin-select2', github: 'mfairburn/activeadmin-select2'
 gem 'active_admin_theme'
-gem 'devise-i18n'
 gem 'active_admin_datetimepicker'
-gem 'state_machine'
+
 # Use ActiveModel has_secure_password
 # gem 'bcrypt', '~> 3.1.7'
 
