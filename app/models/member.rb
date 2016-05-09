@@ -35,6 +35,10 @@ class Member < ActiveRecord::Base
 
   has_many :dayus, :as=>:dayuable
 
+  after_create do |member|
+    member.remember_me!
+  end
+
   def self.permit_params
     [:phone, :username, :password, :password_confirmation]
   end
@@ -67,102 +71,6 @@ class Member < ActiveRecord::Base
 
   def username
     name
-    remember_me!
-
     rememberable_value
   end
-
-  def send_capcha_bind_wechat
-    type = :bind_wechat
-
-    if Dayu.allow_send(self, type) === true
-      self.bind_wechat_capcha = rand(100000..999999)
-      self.save
-
-      config = {
-        'type'=>type,
-        'smsType'=>:normal,
-        'smsFreeSignName'=>'前站',
-        'smsParam'=>{code: self.bind_wechat_capcha, product: '', item: "绑定微信"},
-        'recNum'=>phone,
-        'smsTemplateCode'=>:SMS_2145923
-      }
-
-      dy = Dayu.createByDayuable(self, config)
-      dy.run
-    else
-      false
-    end    
-  end
-
-  def send_capcha_update_password
-    type = :update_password
-
-    if Dayu.allow_send(self, type) === true
-      self.update_password_capcha = rand(100000..999999)
-      self.save
-
-      config = {
-        'type'=>type,
-        'smsType'=>:normal,
-        'smsFreeSignName'=>'前站',
-        'smsParam'=>{code: self.update_password_capcha, product: '', item: "修改密码"},
-        'recNum'=>phone,
-        'smsTemplateCode'=>:SMS_2145923
-      }
-
-      dy = Dayu.createByDayuable(self, config)
-      dy.run
-    else
-      false
-    end    
-  end
-
-  def send_capcha_recover_password
-    type = :recover_password
-
-    if Dayu.allow_send(self, type) === true
-      self.recover_password_capcha = rand(100000..999999)
-      self.save
-
-      config = {
-        'type'=>type,
-        'smsType'=>:normal,
-        'smsFreeSignName'=>'前站',
-        'smsParam'=>{code: self.recover_password_capcha, product: '', item: "找回密码"},
-        'recNum'=>phone,
-        'smsTemplateCode'=>:SMS_2145923
-      }
-
-      dy = Dayu.createByDayuable(self, config)
-      dy.run
-    else
-      false
-    end
-  end
-
-  def send_capcha_validate_user
-    type = :validate_user
-
-    if Dayu.allow_send(self, type) === true
-      self.capcha = rand(100000..999999)
-      self.save
-
-      config = {
-        'type'=>type,
-        'smsType'=>:normal,
-        'smsFreeSignName'=>'前站',
-        'smsParam'=>{code: self.update_password_capcha, product: '', item: "修改密码"},
-        'recNum'=>phone,
-        'smsTemplateCode'=>:SMS_2145923
-      }
-
-      dy = Dayu.createByDayuable(self, config)
-      dy.run
-    else
-      false
-    end    
-  end
-
-  
 end

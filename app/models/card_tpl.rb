@@ -188,7 +188,7 @@ class CardTpl < ActiveRecord::Base
       to = DateTime.now.change({ hour: period.to.hour, min: period.to.min, sec: 0 })
       acquired_time_gt = Card.arel_table[:acquired_at].gt(from)
       acquired_time_lt = Card.arel_table[:acquired_at].lt(to)
-      period.number - cards.where(acquired_time_gt).where(acquired_time_lt).size
+      period.number > cards.where(acquired_time_gt).where(acquired_time_lt).size
     else
       0
     end
@@ -273,9 +273,9 @@ class CardTpl < ActiveRecord::Base
           if result != number
             raise ActiveRecord::Rollback
           end
-          cards.acquired_by(phone).limit(number).order('id desc').each do |card|
-            card.notify_acquired_phone
-          end
+
+          send_message_acquired_cards phone, number
+
           client.create_activity key: 'card.acquire', owner: Member.find_by_phone(by_phone), recipient: self, :parameters=>{:phone=>phone, :by_phone=>by_phone, :number=>number,:type=>'发卷',:msg=>"#{phone}获得了#{number}张卡卷,操作员#{by_phone}"}
         end
         return result
@@ -285,6 +285,30 @@ class CardTpl < ActiveRecord::Base
     else
       return can_acquire
     end
+  end
+
+  def send_message_acquired_cards phone, number
+    config = {
+      'type'=>'acquired_cards',
+      'smsType'=>'normal',
+      'smsFreeSignName'=>'红券',
+      'smsParam'=>{cardnumber: number.to_s, brand: client.try(:brand).to_s, cardname: title.to_s, wechatid: client.try(:wechat_account) },
+      'recNum'=>phone,
+      'smsTemplateCode'=>'SMS_8970466'
+    }
+    Dayu.createByDayuable(self, config).run
+  end
+
+  def send_message_checked_cards phone, number
+    config = {
+      'type'=>'acquired_cards',
+      'smsType'=>'normal',
+      'smsFreeSignName'=>'红券',
+      'smsParam'=>{phonenumber: phone.to_s, brand: client.try(:brand).to_s, cardname: title.to_s, wechatid: client.try(:wechat_account) },
+      'recNum'=>phone,
+      'smsTemplateCode'=>'SMS_8495282'
+    }
+    Dayu.createByDayuable(self, config).run
   end
 
   def self.can_acquire? id, phone
