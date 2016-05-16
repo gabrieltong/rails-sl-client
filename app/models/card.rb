@@ -15,6 +15,7 @@ class Card < ActiveRecord::Base
   has_many :dayus, :as=>:dayuable
 
   delegate 'can_check_by_phone?', :to=>:card_tpl
+  delegate :title, :to=>:card_tpl
 
   scope :by_client, ->(client_id){where(:client_id=>client_id)}
   scope :acquired_by, ->(phone){where(:phone=>phone)}
@@ -51,8 +52,8 @@ class Card < ActiveRecord::Base
   
   validates :type, :inclusion => %w(CardA CardB)
   validates :removed_quantity_id, :presence => true, :if=>'!deleted_at.nil?'
-  validates :phone, :presence => true, :if=>'!acquired_at.nil?'
-  validates :acquired_at, :presence => true, :if=>'!phone.nil?'
+  validates :phone, :presence => true, :if=>'!acquired_at.blank?'
+  validates :acquired_at, :presence => true, :if=>'!phone.blank?'
 
   before_validation do |record|
     record.generate_type
