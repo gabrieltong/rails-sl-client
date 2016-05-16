@@ -130,7 +130,7 @@ ActiveAdmin.register CardTpl do
     end
     column :title
     column :acquire_range do |i|
-      "#{i.acquire_from}<br/>#{i.acquire_to}".html_safe
+      "#{i.acquire_from.strftime("%F %T")}<br/>#{i.acquire_to.strftime("%F %T")}".html_safe
     end
     column :remain do |i|
       "#{i.remain}<br/>总#{i.total}".html_safe
