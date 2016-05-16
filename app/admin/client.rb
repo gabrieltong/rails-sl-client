@@ -1,8 +1,7 @@
 ActiveAdmin.register Client do
   menu :priority=>20
 
-  permit_params :show_name,:show_phone,:show_sex,:show_borned_at,:show_pic,:show_address,:show_email
-
+  permit_params :show_name,:show_phone,:show_sex,:show_borned_at,:show_pic,:show_address,:show_email,:show_license_plate,:show_identity,:show_position,:show_company,:show_collage,:show_emotion,:show_car_type,:show_remark
   scope_to :current_client
 
   controller do
@@ -62,6 +61,14 @@ ActiveAdmin.register Client do
       f.input :show_pic
       f.input :show_address
       f.input :show_email
+      f.input :show_license_plate
+      f.input :show_identity
+      f.input :show_position
+      f.input :show_company
+      f.input :show_collage
+      f.input :show_emotion
+      f.input :show_car_type
+      f.input :show_remark
     end
     actions
   end
