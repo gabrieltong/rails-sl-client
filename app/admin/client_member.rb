@@ -7,7 +7,7 @@ ActiveAdmin.register ClientMember do
 # See permitted parameters documentation:
 # https://github.com/activeadmin/activeadmin/blob/master/docs/2-resource-customization.md#setting-up-strong-parameters
 #
-  permit_params :member_phone, :name, :sex, :borned_at, :pic, :address, :email
+  permit_params :phone, :name, :sex, :borned_at, :pic, :address, :email
 # or
 #
 # permit_params do
@@ -37,7 +37,7 @@ ActiveAdmin.register ClientMember do
       row :id do
         resource.member.try(:id)
       end
-      row :member_phone if Client.find(session[:current_client_id]).show_phone
+      row :phone if Client.find(session[:current_client_id]).show_phone
       image_row :pic if Client.find(session[:current_client_id]).show_pic
       row :name if Client.find(session[:current_client_id]).show_name
       i18n_row :sex if Client.find(session[:current_client_id]).show_sex
@@ -62,7 +62,7 @@ ActiveAdmin.register ClientMember do
     f.inputs I18n.t(:detail) do
       f.input :id , :input_html => { :disabled=>true, :value=>f.object.member.try(:id) } 
       if Client.find(session[:current_client_id]).show_phone
-        f.input :member_phone, :input_html => { :disabled=>true } 
+        f.input :phone, :input_html => { :disabled=>true } 
       end
 
       if Client.find(session[:current_client_id]).show_pic
@@ -101,7 +101,7 @@ ActiveAdmin.register ClientMember do
     end
 
     column :phone do |cm|
-      cm.member_phone
+      cm.phone
     end
 
     column :wechat_binded do |cm|
@@ -119,7 +119,7 @@ ActiveAdmin.register ClientMember do
     actions
   end
 
-  filter :member_phone
+  filter :phone
   filter :name
   filter :groups, :collection => proc{ Client.find(session[:current_client_id]).groups }
 end
