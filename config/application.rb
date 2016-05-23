@@ -24,6 +24,6 @@ module RailsSlAdmin
     config.time_zone = 'Asia/Shanghai'
     config.active_record.raise_in_transactional_callbacks = true
     config.i18n.available_locales   = ['zh-CN','en']
-    config.i18n.default_locale = 'zh-CN'      
+    config.i18n.default_locale = 'zh-CN'
   end
 end
