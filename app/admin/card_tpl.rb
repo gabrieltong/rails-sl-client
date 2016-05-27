@@ -125,6 +125,11 @@ ActiveAdmin.register CardTpl do
     column :type do |i|
       I18n.t("activerecord.models.#{i.type.underscore}")
     end
+
+    column :acquire_type do |i|
+      I18n.t("activerecord.models.#{i.acquire_type.underscore}")
+    end
+
     column :state do |i|
       i.color_state
     end

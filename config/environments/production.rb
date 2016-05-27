@@ -79,4 +79,9 @@ Rails.application.configure do
   
 end
 
-LaPath = '/var/www/la-sl-timer/current/artisan'
+Rails.application.config.middleware.use ExceptionNotification::Rack,
+  :email => {
+    :email_prefix => "[红卷报错] ",
+    :sender_address => %{"notifier" <notifier@hongq.net>},
+    :exception_recipients => %w{334812134@qq.com}
+  }

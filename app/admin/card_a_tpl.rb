@@ -1,6 +1,6 @@
 ActiveAdmin.register CardATpl do
   menu false
-  permit_params :website, :title, :indate_type, :indate_from, :indate_to, :indate_after, :indate_today, :cover, :share_cover, :short_desc,
+  permit_params :website, :title, :acquire_type, :indate_type, :indate_from, :indate_to, :indate_after, :indate_today, :cover, :share_cover, :short_desc,
   :guide_cover, :desc, :intro, :person_limit, :acquire_from, :acquire_to, :change_remain, :_from, :allow_share, :public,
   :group_ids=>[], :check_weeks=>[], :acquire_weeks=>[], :check_hours=>[], :images_attributes=>[:id, :file, :_destroy], :shop_ids=>[], :periods_attributes=>[:id, :from, :to, :number, :person_limit, :_destroy]
   # permit_params
@@ -86,10 +86,11 @@ ActiveAdmin.register CardATpl do
   end
 
   form do |f|
-    f.semantic_errors *f.object.errors.keys
+    f.semantic_errors(*f.object.errors.keys)
 
     f.inputs I18n.t(:detail) do
       f.input :title, :hint=>"建议添加优惠券提供的服务或商品名称，描述卡券提供的具体优惠"
+      f.input :acquire_type, :collection=>CardATpl::AcquireType, :as=>:radio
       f.input :indate_type, :collection=>CardATpl::IndateType, :as=>:radio
       f.input :indate_from , as: :date_time_picker, datepicker_options: { min_date: Date.today - 1.year,        max_date: Date.today + 2.years }, :hint=>'请选择日期/时间'
       f.input :indate_to , as: :date_time_picker, datepicker_options: { min_date: Date.today - 1.year,        max_date: Date.today + 2.years }, :hint=>'请选择日期/时间'
@@ -134,6 +135,7 @@ ActiveAdmin.register CardATpl do
     panel I18n.t(:detail) do
       attributes_table_for resource do
         row :title
+        i18n_row_by_key :acquire_type
         i18n_row_by_key :indate_type
         if resource.indate_type == 'fixed'
           row :indate_from

@@ -52,7 +52,7 @@ ActiveAdmin.register Client do
   end
 
   form do |f|
-    f.semantic_errors *f.object.errors.keys
+    f.semantic_errors(*f.object.errors.keys)
     inputs I18n.t(:detail) do
       f.input :show_name
       f.input :show_phone

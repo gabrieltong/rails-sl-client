@@ -62,6 +62,10 @@ class Client < ActiveRecord::Base
     create_admin
   end
 
+  def self.inheritance_column
+    nil
+  end
+  
   def create_admin
     if admins.where(:phone=>admin_phone).size == 0 
       cm = ClientManager.new(:client_id=>id, :admin=>1, :phone=>admin_phone, :name=>admin_phone)

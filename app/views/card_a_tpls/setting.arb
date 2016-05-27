@@ -1,12 +1,16 @@
 active_admin_form_for resource, :url=>setting_card_a_tpl_path(resource) do |f|
-  f.semantic_errors *f.object.errors.keys
+  f.semantic_errors(*f.object.errors.keys)
 
   f.inputs I18n.t(:detail) do
     # f.input :_from 
     f.input :total, :input_html=>{:disabled=>true, :value=>f.object.cards.size}
     f.input :remain, :input_html=>{:disabled=>true, :value=>f.object.cards.acquirable.size}
     f.input :change_remain, :hint=>'增加后者减少， 总库存不能少于1'
-    f.input :person_limit
+    if f.object.class.login.exists? f.object
+      f.input :person_limit
+    else
+      f.input :person_limit, :value=>1000000
+    end
   end
 
   
@@ -19,7 +23,12 @@ active_admin_form_for resource, :url=>setting_card_a_tpl_path(resource) do |f|
       f2.input :from,  as: :date_time_picker, datepicker_options: { datepicker:false, format: 'H:i', :value=>f2.object.from.try(:strftime, "%T") }
       f2.input :to, as: :date_time_picker, datepicker_options: { datepicker:false, format: 'H:i', :value=>f2.object.to.try(:strftime, "%T") }
       f2.input :number
-      f2.input :person_limit
+      if f2.object.class.login.exists? f2.object
+        f2.input :person_limit
+      else
+        f2.input :person_limit, :value=>1000000
+      end
+      
     end
   end
 

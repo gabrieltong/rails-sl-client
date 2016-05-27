@@ -1,6 +1,6 @@
 ActiveAdmin.register CardBTpl do
   menu false
-  permit_params :website, :title, :cover, :share_cover, :short_desc, :guide_cover, :desc, :intro, :draw_type, :prediction,
+  permit_params :website, :title, :acquire_type, :cover, :share_cover, :short_desc, :guide_cover, :desc, :intro, :draw_type, :prediction,
   :person_limit, :acquire_from, :acquire_to, :change_remain, :_from, :allow_share, :public,
   :group_ids=>[], :images_attributes=>[:id, :file, :_destroy], :draw_awards_attributes=>[:id, :title, :award_id, :number], :acquire_weeks=>[],:periods_attributes=>[:id, :from, :to, :number, :person_limit, :_destroy]
   # permit_params
@@ -52,7 +52,7 @@ ActiveAdmin.register CardBTpl do
   end
 
   form do |f|
-    f.semantic_errors *f.object.errors.keys
+    f.semantic_errors(*f.object.errors.keys)
 
     f.inputs I18n.t(:detail) do
       f.input :title, :hint=>"建议添加优惠券提供的服务或商品名称，描述卡券提供的具体优惠"

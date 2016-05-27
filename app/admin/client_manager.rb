@@ -14,7 +14,7 @@ ActiveAdmin.register ClientManager do
   end
 
   form do |f|
-    f.semantic_errors *f.object.errors.keys
+    f.semantic_errors(*f.object.errors.keys)
     inputs I18n.t(:detail) do
       f.input :shop, :collection=>Client.find(params[:client_id]).shops
       f.input :phone
