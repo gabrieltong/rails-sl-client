@@ -56,6 +56,8 @@ ActiveAdmin.register CardBTpl do
 
     f.inputs I18n.t(:detail) do
       f.input :title, :hint=>"建议添加优惠券提供的服务或商品名称，描述卡券提供的具体优惠"
+      f.input :acquire_type, :collection=>CardTpl::AcquireType, :as=>:radio
+      f.input :acquire_weeks, :collection=>CardTpl::UseWeeks, :as=>:check_boxes, :wrapper_html=>{:style=>'display:none;'}
       f.input :cover, :hint=>"图片建议尺寸640像素*200像素，大小不超过512kb <br/> #{thumb(f.object, :cover)}".html_safe
       f.input :share_cover, :hint=>"图片建议尺寸140像素*140像素，大小不超过200kb <br/> #{thumb(f.object, :share_cover)}".html_safe
       f.input :short_desc, :as=>:string, :hint=>'简单描述提供的优惠或特色服务，吸引消费者。长度不超过30个汉字'

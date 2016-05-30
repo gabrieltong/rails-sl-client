@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160524063335) do
+ActiveRecord::Schema.define(version: 20160527095836) do
 
   create_table "active_admin_comments", force: :cascade do |t|
     t.string   "namespace",     limit: 255
@@ -103,46 +103,46 @@ ActiveRecord::Schema.define(version: 20160524063335) do
 
   create_table "card_tpl_settings", force: :cascade do |t|
     t.integer  "card_tpl_id",       limit: 4
-    t.boolean  "check_monday"
-    t.boolean  "check_tuesday"
-    t.boolean  "check_wednesday"
-    t.boolean  "check_thursday"
-    t.boolean  "check_friday"
-    t.boolean  "check_saturday"
-    t.boolean  "check_sunday"
-    t.boolean  "acquire_monday"
-    t.boolean  "acquire_tuesday"
-    t.boolean  "acquire_wednesday"
-    t.boolean  "acquire_thursday"
-    t.boolean  "acquire_friday"
-    t.boolean  "acquire_saturday"
-    t.boolean  "acquire_sunday"
-    t.boolean  "check_h0"
-    t.boolean  "check_h1"
-    t.boolean  "check_h2"
-    t.boolean  "check_h3"
-    t.boolean  "check_h4"
-    t.boolean  "check_h5"
-    t.boolean  "check_h6"
-    t.boolean  "check_h7"
-    t.boolean  "check_h8"
-    t.boolean  "check_h9"
-    t.boolean  "check_h10"
-    t.boolean  "check_h11"
-    t.boolean  "check_h12"
-    t.boolean  "check_h13"
-    t.boolean  "check_h14"
-    t.boolean  "check_h15"
-    t.boolean  "check_h16"
-    t.boolean  "check_h17"
-    t.boolean  "check_h18"
-    t.boolean  "check_h19"
-    t.boolean  "check_h20"
-    t.boolean  "check_h21"
-    t.boolean  "check_h22"
-    t.boolean  "check_h23"
-    t.datetime "created_at",                  null: false
-    t.datetime "updated_at",                  null: false
+    t.boolean  "check_monday",                default: true
+    t.boolean  "check_tuesday",               default: true
+    t.boolean  "check_wednesday",             default: true
+    t.boolean  "check_thursday",              default: true
+    t.boolean  "check_friday",                default: true
+    t.boolean  "check_saturday",              default: true
+    t.boolean  "check_sunday",                default: true
+    t.boolean  "acquire_monday",              default: true
+    t.boolean  "acquire_tuesday",             default: true
+    t.boolean  "acquire_wednesday",           default: true
+    t.boolean  "acquire_thursday",            default: true
+    t.boolean  "acquire_friday",              default: true
+    t.boolean  "acquire_saturday",            default: true
+    t.boolean  "acquire_sunday",              default: true
+    t.boolean  "check_h0",                    default: true
+    t.boolean  "check_h1",                    default: true
+    t.boolean  "check_h2",                    default: true
+    t.boolean  "check_h3",                    default: true
+    t.boolean  "check_h4",                    default: true
+    t.boolean  "check_h5",                    default: true
+    t.boolean  "check_h6",                    default: true
+    t.boolean  "check_h7",                    default: true
+    t.boolean  "check_h8",                    default: true
+    t.boolean  "check_h9",                    default: true
+    t.boolean  "check_h10",                   default: true
+    t.boolean  "check_h11",                   default: true
+    t.boolean  "check_h12",                   default: true
+    t.boolean  "check_h13",                   default: true
+    t.boolean  "check_h14",                   default: true
+    t.boolean  "check_h15",                   default: true
+    t.boolean  "check_h16",                   default: true
+    t.boolean  "check_h17",                   default: true
+    t.boolean  "check_h18",                   default: true
+    t.boolean  "check_h19",                   default: true
+    t.boolean  "check_h20",                   default: true
+    t.boolean  "check_h21",                   default: true
+    t.boolean  "check_h22",                   default: true
+    t.boolean  "check_h23",                   default: true
+    t.datetime "created_at",                                 null: false
+    t.datetime "updated_at",                                 null: false
   end
 
   add_index "card_tpl_settings", ["acquire_friday"], name: "index_card_tpl_settings_on_acquire_friday", using: :btree

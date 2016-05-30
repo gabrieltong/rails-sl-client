@@ -1,3 +1,4 @@
+# encoding: UTF-8
 class Client < ActiveRecord::Base
   include PublicActivity::Model
 
@@ -59,13 +60,25 @@ class Client < ActiveRecord::Base
   acts_as_taggable_on :tag
 
   after_save do |record|
+    # 创建管理员
     create_admin
   end
+
+  after_create do |record|
+    # 创建管理员
+    create_default_group
+  end  
 
   def self.inheritance_column
     nil
   end
   
+  def create_default_group
+    if self.groups.default.blank?
+      self.groups.default.active.create(:title=>'默认会员组', :position=>0, :desc=>'默认会员组')
+    end
+  end
+
   def create_admin
     if admins.where(:phone=>admin_phone).size == 0 
       cm = ClientManager.new(:client_id=>id, :admin=>1, :phone=>admin_phone, :name=>admin_phone)

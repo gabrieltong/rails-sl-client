@@ -1,4 +1,7 @@
 'zh-CN':
+  acquire_type:
+    anonymous: '游客卷'
+    login: '会员卷'
   card_tpl:
     type:
       CardATpl: '优惠券'
@@ -174,7 +177,7 @@
         longitude: '经度'
         latitude: '维度'
       client_manager:
-        shop: '门店'
+        shops: '门店'
         client_id: '商户'
         phone: '电话'
         name: '姓名'
@@ -368,7 +371,7 @@
         added_quantity_id: '创建批次'
         removed_quantity_id: '删除批次'
       card_tpl:
-        acquire_type: '获取类型'
+        acquire_type: '领取权限'
         state: '状态'
         acquire_range: '投放日期'
         client_id: '商户ID'

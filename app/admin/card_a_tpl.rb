@@ -90,7 +90,7 @@ ActiveAdmin.register CardATpl do
 
     f.inputs I18n.t(:detail) do
       f.input :title, :hint=>"建议添加优惠券提供的服务或商品名称，描述卡券提供的具体优惠"
-      f.input :acquire_type, :collection=>CardATpl::AcquireType, :as=>:radio
+      f.input :acquire_type, :collection=>CardTpl::AcquireType, :as=>:radio
       f.input :indate_type, :collection=>CardATpl::IndateType, :as=>:radio
       f.input :indate_from , as: :date_time_picker, datepicker_options: { min_date: Date.today - 1.year,        max_date: Date.today + 2.years }, :hint=>'请选择日期/时间'
       f.input :indate_to , as: :date_time_picker, datepicker_options: { min_date: Date.today - 1.year,        max_date: Date.today + 2.years }, :hint=>'请选择日期/时间'
@@ -98,6 +98,8 @@ ActiveAdmin.register CardATpl do
       f.input :indate_today, :hint=>'勾选此项后，从领取次日计算有效期，否则从当日0点开始计时'
       f.input :check_weeks, :collection=>CardTpl::UseWeeks, :as=>:check_boxes
       f.input :check_hours, :collection=>CardTpl::UseHours, :as=>:check_boxes
+      # 默认将获取周都勾选上
+      f.input :acquire_weeks, :collection=>CardTpl::UseWeeks, :as=>:check_boxes, :wrapper_html=>{:style=>'display:none;'}
       f.input :cover, :hint=>"图片建议尺寸640像素*200像素，大小不超过512kb <br/> #{thumb(f.object, :cover)}".html_safe
       f.input :share_cover, :hint=>"图片建议尺寸140像素*140像素，大小不超过200kb <br/> #{thumb(f.object, :share_cover)}".html_safe
       f.input :short_desc, :as=>:string, :hint=>'简单描述提供的优惠或特色服务，吸引消费者。长度不超过30个汉字'
@@ -105,7 +107,7 @@ ActiveAdmin.register CardATpl do
     end
 
     # f.inputs "Meta Data", for: [:card_tpl_setting, f.object.card_tpl_setting || CardTplSetting.new] do |setting_f|
-    # 	setting_f.input :use_h01
+    #   setting_f.input :use_h01
     # end
 
     f.inputs '优惠详情' do
@@ -113,7 +115,7 @@ ActiveAdmin.register CardATpl do
       f.input :intro, :as=>:text, :input_html=>{:rows=>5}, :hint=>'长度不超过300个汉字'
       f.input :website, :hint=>'可填写商家更多详细信息页面网址'
       f.input :guide_cover, :hint=>"图片建议宽度960像素，大小不超过512kb <br/> #{thumb(f.object, :guide_cover)}".html_safe
-    end	
+    end 
 
     # f.has_many :images do |item|
     #   item.inputs '附件' do 

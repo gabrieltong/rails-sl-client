@@ -20,17 +20,16 @@ ActiveAdmin.register Group do
     belongs_to :client, optional: true
   end
 
-  member_action :set_default, method: :get do 
-    resource.to_default
-    redirect_to request.referer, notice: "设置默认成功"
-  end
+  # member_action :set_default, method: :get do 
+  #   resource.to_default
+  #   redirect_to request.referer, notice: "设置默认成功"
+  # end
 
   form do |f|
     f.inputs I18n.t(:detail) do
       f.input :title
       f.input :position
-      f.input :default
-      f.input :active      
+      f.input :active, :label=>'是否开启(默认会员组必须开启)'
       f.input :desc, :as=>:text
     end
 
@@ -56,7 +55,7 @@ ActiveAdmin.register Group do
     column :active      
     column :desc
     actions :default=>true,  min_width: "180px" do |group|
-      link_to '设为默认', set_default_group_path(group)
+      # link_to '设为默认', set_default_group_path(group)
     end
   end  
 

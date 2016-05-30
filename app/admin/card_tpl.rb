@@ -127,7 +127,7 @@ ActiveAdmin.register CardTpl do
     end
 
     column :acquire_type do |i|
-      I18n.t("activerecord.models.#{i.acquire_type.underscore}")
+      I18n.t("card_tpl.acquire_type.#{i.acquire_type.underscore}")
     end
 
     column :state do |i|
@@ -135,7 +135,7 @@ ActiveAdmin.register CardTpl do
     end
     column :title
     column :acquire_range do |i|
-      "#{i.acquire_from.strftime("%F %T")}<br/>#{i.acquire_to.strftime("%F %T")}".html_safe
+      "#{i.acquire_from.try(:strftime, '%F %T')}<br/>#{i.acquire_to.try(:strftime, '%F %T')}".html_safe
     end
     column :remain do |i|
       "#{i.remain}<br/>总#{i.total}".html_safe

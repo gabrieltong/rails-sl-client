@@ -14,6 +14,8 @@ class Ability
     can [:permission, :activate, :deactivate, :pause, :report], CardTpl
     can [:create, :setting], CardATpl
     can [:create, :setting], CardBTpl
+
+     cannot :destroy, Group, :default => true
     # Define abilities for the passed in user here. For example:
     #
     #   user ||= User.new # guest user (not logged in)

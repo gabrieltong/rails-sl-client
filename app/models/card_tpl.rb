@@ -33,8 +33,8 @@ class CardTpl < ActiveRecord::Base
   scope :fixed, ->{where(:indate_type=>:fixed)}
   scope :dynamic, ->{where(:indate_type=>:dynamic)}
 
-  scope :anonymous, ->{where(:indate_type=>:anonymous)}
-  scope :login, ->{where(:indate_type=>:login)}
+  scope :anonymous, ->{where(:acquire_type=>:anonymous)}
+  scope :login, ->{where(:acquire_type=>:login)}
 
   scope :datetime_acquirable, ->{where(arel_table[:acquire_from].lt(DateTime.now)).where(arel_table[:acquire_to].gt(DateTime.now))}
   scope :week_acquirable, ->{joins(:setting).where(:card_tpl_settings=>{"acquire_#{DateTime.now.strftime('%A').downcase}"=>1})}
@@ -56,6 +56,7 @@ class CardTpl < ActiveRecord::Base
   accepts_nested_attributes_for :quantities, :allow_destroy => false
 
   validates :shops, :presence=> true
+  validates :groups, :presence=> true
   validates :client_id, :title, :presence=>true
   validates :person_limit, :numericality => {:greater_than => 0}
   validates :total, :numericality => {:only_integer => true, :greater_than_or_equal_to => 0}
@@ -74,6 +75,12 @@ class CardTpl < ActiveRecord::Base
 
   has_attached_file :guide_cover, styles: { medium: "300x300>", thumb: "100x100>" }, default_url: "/images/:style/missing.png"
   validates_attachment_content_type :guide_cover, content_type: /\Aimage\/.*\Z/
+
+  after_initialize do |record|
+    record.acquire_weeks = UseWeeks.values
+    record.check_weeks = UseWeeks.values
+    record.check_hours = UseHours.values
+  end 
 
   after_save do |record|
     update_setting
@@ -125,6 +132,8 @@ class CardTpl < ActiveRecord::Base
           :week_not_acquirable
         elsif hour_can_acquire? != true
           :hour_not_acquirable
+        elsif groups_can_acquire? != true
+          :groups_can_acquire
         elsif period_card_can_acquire? != true
           :period_card_limit_overflow
         elsif phone_can_acquire?(phone) != true
@@ -174,6 +183,14 @@ class CardTpl < ActiveRecord::Base
         client.create_activity key: 'card.check', owner: Member.find_by_phone(by_phone), recipient: self, :parameters=>{:phone=>phone, :by_phone=>by_phone, :number=>number,:type=>'核销',:msg=>"#{phone}被核销了#{number}张卡卷,操作员#{by_phone}"}
       end
       result
+    end
+  end
+
+  def groups_can_acquire? phone
+    if self.class.anonymous.include? self.id
+      return true
+    else
+      !Member.find_by_phone(phone).where(:id=>groups).blank?
     end
   end
 
