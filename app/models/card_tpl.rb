@@ -56,7 +56,7 @@ class CardTpl < ActiveRecord::Base
   accepts_nested_attributes_for :quantities, :allow_destroy => false
 
   validates :shops, :presence=> true
-  validates :groups, :presence=> true
+  # validates :groups, :presence=> true
   validates :client_id, :title, :presence=>true
   validates :person_limit, :numericality => {:greater_than => 0}
   validates :total, :numericality => {:only_integer => true, :greater_than_or_equal_to => 0}
