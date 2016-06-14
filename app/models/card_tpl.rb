@@ -17,6 +17,7 @@ class CardTpl < ActiveRecord::Base
 
   has_many :card_tpl_groups
   has_many :groups, :through=>:card_tpl_groups
+  has_many :members, :through=>:groups, :source=>:members
 
   has_one :setting, :class_name=>CardTplSetting
   has_many :periods
@@ -29,6 +30,9 @@ class CardTpl < ActiveRecord::Base
   scope :ab, ->{where(:type=>[:CardATpl, :CardBTpl])}
   scope :a, ->{where(:type=>:CardATpl)}
   scope :b, ->{where(:type=>:CardBTpl)}
+
+  scope :open, ->{where(:public=>true)}
+  scope :unopen, ->{where.not(:public=>true)}
 
   scope :fixed, ->{where(:indate_type=>:fixed)}
   scope :dynamic, ->{where(:indate_type=>:dynamic)}
@@ -43,7 +47,7 @@ class CardTpl < ActiveRecord::Base
   scope :week_checkable, ->{joins(:setting).where(:card_tpl_settings=>{"check_#{DateTime.now.strftime('%A').downcase}"=>1})}
   scope :hour_checkable, ->{joins(:setting).where(:card_tpl_settings=>{"check_h#{DateTime.now.hour}"=>1})}
 
-  scope :sendable_by, ->(phone){joins(:shops=>[:managers]).where(Member.arel_table[:phone].eq(phone)).where(ClientManager.arel_table[:sender].eq(1))}
+  scope :sendable_by, ->(phone){joins(:shops=>[:managers]).where.not(:public=>true).where(Member.arel_table[:phone].eq(phone)).where(ClientManager.arel_table[:sender].eq(1))}
   scope :checkable_by, ->(phone){joins(:shops=>[:managers]).where(Member.arel_table[:phone].eq(phone)).where(ClientManager.arel_table[:checker].eq(1))}
 
   serialize :acquire_weeks
@@ -56,7 +60,7 @@ class CardTpl < ActiveRecord::Base
   accepts_nested_attributes_for :quantities, :allow_destroy => false
 
   validates :shops, :presence=> true
-  # validates :groups, :presence=> true
+  validates :groups, :presence=> true
   validates :client_id, :title, :presence=>true
   validates :person_limit, :numericality => {:greater_than => 0}
   validates :total, :numericality => {:only_integer => true, :greater_than_or_equal_to => 0}
@@ -81,6 +85,13 @@ class CardTpl < ActiveRecord::Base
     record.check_weeks = UseWeeks.values
     record.check_hours = UseHours.values
   end 
+
+  before_save do |record|
+    # 如果需要登录， 默认勾选所有会员组
+    if record.class.login.exists? record.id
+      record.groups = record.client.groups
+    end
+  end
 
   after_save do |record|
     update_setting
@@ -132,8 +143,8 @@ class CardTpl < ActiveRecord::Base
           :week_not_acquirable
         elsif hour_can_acquire? != true
           :hour_not_acquirable
-        elsif groups_can_acquire? != true
-          :groups_can_acquire
+        elsif groups_can_acquire?(phone) != true
+          :groups_not_acquirable
         elsif period_card_can_acquire? != true
           :period_card_limit_overflow
         elsif phone_can_acquire?(phone) != true
@@ -186,11 +197,11 @@ class CardTpl < ActiveRecord::Base
     end
   end
 
-  def groups_can_acquire? phone
+  def groups_can_acquire? phone=''
     if self.class.anonymous.include? self.id
       return true
     else
-      !Member.find_by_phone(phone).where(:id=>groups).blank?
+      self.members.exists?(:phone=>phone)
     end
   end
 
