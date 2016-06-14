@@ -28,7 +28,7 @@ ActiveAdmin.register Import do
   form do |f|
     f.inputs I18n.t(:detail) do
       f.input :group, :collection=>resource.client.groups
-      f.input :file
+      f.input :file, :hint=>(link_to 'sample.xlsx', '/import-members-sample.xlsx')
     end
     actions
   end

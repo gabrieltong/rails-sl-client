@@ -1,0 +1,2 @@
+class AliErr < ApplicationMailer
+end

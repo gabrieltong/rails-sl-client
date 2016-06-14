@@ -122,7 +122,7 @@ ActiveAdmin.register CardTpl do
     selectable_column
     id_column
     column :client_id
-    column :title
+    truncate_column :title
 
     column :type do |i|
       I18n.t("activerecord.models.#{i.type.underscore}")

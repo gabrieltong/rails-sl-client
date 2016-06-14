@@ -2,6 +2,10 @@
 module ActiveAdmin
   module Views
     class TableFor
+      def truncate_column(attribute)
+        column(attribute){ |model| truncate(model[attribute], omision: "...", length: 30)}
+      end
+
       def safe_column(attribute)
         column(attribute){ |model| model[attribute].try(:html_safe) }
       end
