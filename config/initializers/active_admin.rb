@@ -20,7 +20,7 @@ ActiveAdmin.setup do |config|
   #
   config.view_factory.register footer: Footer
 
-  config.site_title = "Rails E2 Admin"
+  config.site_title = "Rails SL Admin"
   # config.register_javascript 'ckeditor/init.js'
   config.register_javascript '//cdn.bootcss.com/pickadate.js/3.5.6/compressed/picker.js'
   config.register_javascript '//cdn.bootcss.com/pickadate.js/3.5.6/compressed/picker.date.js'

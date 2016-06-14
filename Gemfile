@@ -51,6 +51,7 @@ gem 'kaminari'
 gem 'activeadmin-select2', github: 'mfairburn/activeadmin-select2'
 gem 'active_admin_theme'
 gem 'active_admin_datetimepicker'
+gem 'activeadmin_addons'
 
 # Use ActiveModel has_secure_password
 # gem 'bcrypt', '~> 3.1.7'
@@ -73,6 +74,7 @@ group :development do
   gem 'spring'
   gem 'capistrano', '~> 3.1'
   gem 'capistrano-rails', '~> 1.1'
+  gem 'capistrano-passenger'
 end
 
 gem 'alidayu'
