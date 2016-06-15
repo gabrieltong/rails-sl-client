@@ -7,9 +7,9 @@ active_admin_form_for resource, :url=>setting_card_a_tpl_path(resource) do |f|
     f.input :remain, :input_html=>{:disabled=>true, :value=>f.object.cards.acquirable.size}
     f.input :change_remain, :hint=>'增加后者减少， 总库存不能少于1'
     if f.object.class.login.exists? f.object.id
-      f.input :person_limit
+      f.input :person_limit, :hint=>'如果为匿名券, 设置无用'
     else
-      f.input :person_limit, :input_html=>{:value=>100}, :as=>:hidden
+      f.input :person_limit, :input_html=>{:value=>100}, :as=>:hidden, :hint=>'如果为匿名券, 设置无用'
     end
   end
 
@@ -23,9 +23,9 @@ active_admin_form_for resource, :url=>setting_card_a_tpl_path(resource) do |f|
       f2.input :to, as: :date_time_picker, datepicker_options: { datepicker: false, format: 'H:i', :value=>f2.object.to.try(:strftime, "%T") }
       f2.input :number
       if f.object.class.login.exists? f.object.id
-        f2.input :person_limit
+        f2.input :person_limit, :hint=>'如果为匿名券, 设置无用'
       else
-        f2.input :person_limit, :input_html=>{:value=>100}, :as=>:hidden
+        f2.input :person_limit, :input_html=>{:value=>100}, :as=>:hidden, :hint=>'如果为匿名券, 设置无用'
       end
       
     end

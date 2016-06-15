@@ -121,13 +121,21 @@ ActiveAdmin.register CardTpl do
   index do
     selectable_column
     id_column
-    column :client_id
+    # column :client_id
     truncate_column :title
 
     column :type do |i|
       I18n.t("activerecord.models.#{i.type.underscore}")
     end
 
+    column :indate_type do |i|
+      i.indate_text
+    end
+
+    column :acquire_range do |i|
+      "#{i.acquire_from.try(:strftime, '%F')}<br/>#{i.acquire_to.try(:strftime, '%F')}".html_safe
+    end
+    
     column :state do |i|
       i.color_state
     end
@@ -138,14 +146,10 @@ ActiveAdmin.register CardTpl do
       I18n.t("card_tpl.acquire_type.#{i.acquire_type.underscore}")
     end
 
-    
-    
-    column :acquire_range do |i|
-      "#{i.acquire_from.try(:strftime, '%F')}<br/>#{i.acquire_to.try(:strftime, '%F')}".html_safe
-    end
     column :remain do |i|
       "#{i.remain}<br/>总#{i.total}".html_safe
-    end    
+    end
+
     actions :defaults=>true do |i|
       links = [
         link_to('设定器', setting_card_tpl_path(i)),
