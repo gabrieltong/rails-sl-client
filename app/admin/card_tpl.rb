@@ -147,7 +147,7 @@ ActiveAdmin.register CardTpl do
     end
 
     column :remain do |i|
-      "#{i.remain}/#{i.total}".html_safe
+      "#{i.cards.acquirable.count}/#{i.total}".html_safe
     end
 
     actions :defaults=>true do |i|
