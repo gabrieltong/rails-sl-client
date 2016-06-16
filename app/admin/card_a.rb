@@ -16,14 +16,15 @@ ActiveAdmin.register CardA do
 #   permitted
 # end
   scope :all
-  scope :checkable
+  # scope :checkable
   scope :acquirable
   scope :locked
-  scope :not_locked
   scope :acquired
-  scope :not_acquired
   scope :checked
-  scope :not_checked
+  # scope :not_locked
+  # scope :not_acquired
+  
+  # scope :not_checked
   # scope :active
   # scope :inactive
   

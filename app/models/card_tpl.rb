@@ -198,9 +198,10 @@ class CardTpl < ActiveRecord::Base
   end
 
   def groups_can_acquire? phone=''
-    logger.info 'groups_can_acquire >>>>'
-    if self.class.anonymous.include? self.id
+    if self.open? && self.anonymous?
       return true
+    elsif self.open? && !self.anonymous?
+      return !phone.blank?
     else
       return self.members.exists?(:phone=>phone)
     end
@@ -295,7 +296,11 @@ class CardTpl < ActiveRecord::Base
   end
 
   def can_send_by_phone? phone
-    self.class.sendable_by(phone).exists?(id)
+    if self.class.open.exists?(id)
+      phone.blank?
+    else
+      self.class.sendable_by(phone).exists?(id)
+    end
   end
 
   def can_check_by_phone? phone
@@ -355,15 +360,17 @@ class CardTpl < ActiveRecord::Base
   end
 
   def send_message_acquired_cards phone, number
-    config = {
-      'type'=>'acquired_cards',
-      'smsType'=>'normal',
-      'smsFreeSignName'=>'红券',
-      'smsParam'=>{cardnumber: number.to_s, brand: client.try(:brand).to_s, cardname: title.to_s, wechatid: client.try(:wechat_account) },
-      'recNum'=>phone,
-      'smsTemplateCode'=>'SMS_8970466'
-    }
-    Dayu.createByDayuable(self, config).run
+    unless phone.blank?
+      config = {
+        'type'=>'acquired_cards',
+        'smsType'=>'normal',
+        'smsFreeSignName'=>'红券',
+        'smsParam'=>{cardnumber: number.to_s, brand: client.try(:brand).to_s, cardname: title.to_s, wechatid: client.try(:wechat_account) },
+        'recNum'=>phone,
+        'smsTemplateCode'=>'SMS_8970466'
+      }
+      Dayu.createByDayuable(self, config).run
+    end
   end
 
   def send_message_checked_cards phone, number
@@ -451,6 +458,10 @@ class CardTpl < ActiveRecord::Base
 
   def anonymous?
     self.acquire_type.to_sym == :anonymous
+  end
+
+  def open?
+    self.public == true
   end
 
   private
