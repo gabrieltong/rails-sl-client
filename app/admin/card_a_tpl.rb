@@ -11,6 +11,9 @@ ActiveAdmin.register CardATpl do
       redirect_to card_tpls_path(:scope=>:a)
     end
 
+    # def new
+
+    # end
     # def update
     #   update! do
     #     if !resource.valid? and resource._from == 'setting'
@@ -91,6 +94,8 @@ ActiveAdmin.register CardATpl do
     f.inputs I18n.t(:detail) do
       f.input :title, :hint=>"建议添加优惠券提供的服务或商品名称，描述卡券提供的具体优惠"
       f.input :acquire_type, :collection=>CardTpl::AcquireType, :as=>:radio
+      f.input :groups, :collection=>Client.find(session[:current_client_id]).groups, :wrapper_html=>{:style=>'display:none;'}
+      f.input :public, :as=>:hidden
       f.input :indate_type, :collection=>CardATpl::IndateType, :as=>:radio
       f.input :indate_from , as: :date_time_picker, datepicker_options: { min_date: Date.today - 1.year,        max_date: Date.today + 2.years }, :hint=>'请选择日期/时间'
       f.input :indate_to , as: :date_time_picker, datepicker_options: { min_date: Date.today - 1.year,        max_date: Date.today + 2.years }, :hint=>'请选择日期/时间'

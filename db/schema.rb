@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160527095836) do
+ActiveRecord::Schema.define(version: 20160616063108) do
 
   create_table "active_admin_comments", force: :cascade do |t|
     t.string   "namespace",     limit: 255
@@ -236,7 +236,7 @@ ActiveRecord::Schema.define(version: 20160527095836) do
     t.datetime "acquire_from"
     t.datetime "acquire_to"
     t.string   "acquire_weeks",            limit: 255
-    t.boolean  "public"
+    t.boolean  "public",                               default: true
     t.boolean  "allow_share"
     t.string   "acquire_type",             limit: 255
   end
@@ -278,6 +278,7 @@ ActiveRecord::Schema.define(version: 20160527095836) do
     t.string   "checker_phone",       limit: 11
     t.string   "sender_phone",        limit: 11
     t.time     "acquired_time"
+    t.string   "openid",              limit: 255
   end
 
   add_index "cards", ["added_quantity_id"], name: "index_cards_on_added_quantity_id", using: :btree
@@ -291,6 +292,7 @@ ActiveRecord::Schema.define(version: 20160527095836) do
   add_index "cards", ["locked_by_tpl_id"], name: "index_cards_on_locked_by_tpl_id", using: :btree
   add_index "cards", ["locked_id"], name: "index_cards_on_locked_id", using: :btree
   add_index "cards", ["locked_tpl_id"], name: "index_cards_on_locked_tpl_id", using: :btree
+  add_index "cards", ["openid"], name: "index_cards_on_openid", using: :btree
   add_index "cards", ["phone"], name: "index_cards_on_phone", using: :btree
   add_index "cards", ["removed_quantity_id"], name: "index_cards_on_removed_quantity_id", using: :btree
   add_index "cards", ["sender_phone"], name: "index_cards_on_sender_phone", using: :btree
@@ -308,7 +310,6 @@ ActiveRecord::Schema.define(version: 20160527095836) do
     t.datetime "updated_at",             null: false
     t.string   "phone",      limit: 255
     t.string   "name",       limit: 255
-    t.integer  "shop_id",    limit: 4
   end
 
   add_index "client_managers", ["admin"], name: "index_client_managers_on_admin", using: :btree
@@ -317,7 +318,6 @@ ActiveRecord::Schema.define(version: 20160527095836) do
   add_index "client_managers", ["member_id"], name: "index_client_managers_on_member_id", using: :btree
   add_index "client_managers", ["phone"], name: "index_client_managers_on_phone", using: :btree
   add_index "client_managers", ["sender"], name: "index_client_managers_on_sender", using: :btree
-  add_index "client_managers", ["shop_id"], name: "index_client_managers_on_shop_id", using: :btree
 
   create_table "client_members", force: :cascade do |t|
     t.integer  "client_id",        limit: 4
@@ -608,6 +608,7 @@ ActiveRecord::Schema.define(version: 20160527095836) do
     t.string   "update_password_capcha",  limit: 10
     t.string   "bind_wechat_capcha",      limit: 10
     t.datetime "capcha_expired_at"
+    t.string   "api_token",               limit: 255
   end
 
   add_index "members", ["capcha"], name: "index_members_on_capcha", using: :btree

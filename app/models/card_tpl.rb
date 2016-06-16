@@ -84,14 +84,9 @@ class CardTpl < ActiveRecord::Base
     record.acquire_weeks = UseWeeks.values
     record.check_weeks = UseWeeks.values
     record.check_hours = UseHours.values
+    record.public = true
+    record.groups = client.groups if client
   end 
-
-  before_save do |record|
-    # 如果需要登录， 默认勾选所有会员组
-    if record.class.login.exists? record.id
-      record.groups = record.client.groups
-    end
-  end
 
   after_save do |record|
     update_setting
@@ -452,6 +447,10 @@ class CardTpl < ActiveRecord::Base
     end
 
     self.setting.save
+  end
+
+  def anonymous?
+    self.acquire_type.to_sym == :anonymous
   end
 
   private
