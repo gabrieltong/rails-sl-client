@@ -135,7 +135,7 @@ ActiveAdmin.register CardTpl do
     column :acquire_range do |i|
       "#{i.acquire_from.try(:strftime, '%F')}<br/>#{i.acquire_to.try(:strftime, '%F')}".html_safe
     end
-    
+
     column :state do |i|
       i.color_state
     end
@@ -147,7 +147,7 @@ ActiveAdmin.register CardTpl do
     end
 
     column :remain do |i|
-      "#{i.remain}<br/>总#{i.total}".html_safe
+      "#{i.remain}/#{i.total}".html_safe
     end
 
     actions :defaults=>true do |i|

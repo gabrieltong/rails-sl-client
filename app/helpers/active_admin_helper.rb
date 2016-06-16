@@ -2,16 +2,22 @@
 module ActiveAdmin
   module Views
     class TableFor
-      def truncate_column(attribute)
-        column(attribute){ |model| truncate(model[attribute], omision: "...", length: 30)}
+      def date_column(attribute, options={})
+        column(attribute, options) do  |model| 
+          model[attribute].strftime('%F') unless model[attribute].nil?
+        end
       end
 
-      def safe_column(attribute)
-        column(attribute){ |model| model[attribute].try(:html_safe) }
+      def truncate_column(attribute, options={})
+        column(attribute, options){ |model| truncate(model[attribute], omision: "...", length: 30)}
       end
 
-      def yesno_column(attribute)
-        column(attribute) do |model| 
+      def safe_column(attribute, options={})
+        column(attribute, options){ |model| model[attribute].try(:html_safe) }
+      end
+
+      def yesno_column(attribute, options={})
+        column(attribute, options) do |model| 
           case model[attribute] 
           when true
             '&#x2714;'.html_safe
@@ -23,8 +29,8 @@ module ActiveAdmin
         end
       end
 
-      def shifou_column(attribute)
-        column(attribute) do |model| 
+      def shifou_column(attribute, options={})
+        column(attribute, options) do |model| 
           case model[attribute] 
           when true
             '是'
@@ -36,11 +42,11 @@ module ActiveAdmin
         end
       end
 
-      def blank_column(attribute)
-        column(attribute){ |model| model[attribute] ? '&#x2714;'.html_safe : '&#x2717;'.html_safe }
+      def blank_column(attribute, options={})
+        column(attribute, options){ |model| model[attribute] ? '&#x2714;'.html_safe : '&#x2717;'.html_safe }
       end
-      def i18n_column(attribute)
-        column(attribute){ |model| model[attribute] ? I18n.t(model[attribute]) : ''}
+      def i18n_column(attribute, options={})
+        column(attribute, options){ |model| model[attribute] ? I18n.t(model[attribute]) : ''}
       end
     end
     class AttributesTable

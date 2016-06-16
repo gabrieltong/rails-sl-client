@@ -2,6 +2,7 @@
 ActiveAdmin.register CardA do
   menu false
   belongs_to :card_a_tpl, :optional=>true
+  includes [:card_tpl]
 # See permitted parameters documentation:
 # https://github.com/activeadmin/activeadmin/blob/master/docs/2-resource-customization.md#setting-up-strong-parameters
 #
@@ -23,13 +24,15 @@ ActiveAdmin.register CardA do
   scope :not_acquired
   scope :checked
   scope :not_checked
-  scope :active
-  scope :inactive
+  # scope :active
+  # scope :inactive
   
 
   index do 
     column :added_quantity_id
-    column :code
+    column :code, :sortable=>false
+    date_column :from, :sortable=>false
+    date_column :to, :sortable=>false
     column :sender_phone
     column :phone
     column :checker_phone
