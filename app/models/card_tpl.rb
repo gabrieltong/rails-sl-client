@@ -110,7 +110,7 @@ class CardTpl < ActiveRecord::Base
         :card_tpl_inactive
       end
 
-      def can_acquire?(phone)
+      def can_acquire? phone=nil, agent=:admin
         :card_tpl_inactive
       end
     end
@@ -162,7 +162,7 @@ class CardTpl < ActiveRecord::Base
         _can_check? number
       end
 
-      def can_acquire?(phone)
+      def can_acquire? phone=nil, agent=:admin
         :card_tpl_paused
       end
     end
