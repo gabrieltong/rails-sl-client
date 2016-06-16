@@ -48,9 +48,9 @@ class CardA < Card
   end
   # private
   def fix_from_to
-    if !self.acquired_at.blank? && self.indate_type.to_s == 'dynamic'
-      self.from = acquired_at
-      self.to = acquired_at + self.indate_after.days
+    if !self.acquired_at.blank? && self.indate_type.to_sym == :dynamic
+      self.from = acquired_at + (self.indate_today == true ? 1.days : 0.days)
+      self.to = self.from + self.indate_after.days
       self.save :validate=>false
     end
   end
