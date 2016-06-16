@@ -1,7 +1,7 @@
 active_admin_form_for resource, :url=>permission_card_a_tpl_path(resource) do |f|
   f.semantic_errors(*f.object.errors.keys)
   f.inputs I18n.t(:detail) do
-    f.input :groups, :collection=>Client.find(session[:current_client_id]).groups, :as=>:check_boxes
+    f.input :groups, :collection=>Client.find(session[:current_client_id]).groups, :as=>:check_boxes, :disabled => Client.find(session[:current_client_id]).groups.collect(&:id)
     f.input :allow_share
     f.input :public, :hint=>I18n.t('activerecord.attributes.card_tpl.public_hint'), :input_html=>{:disabled=>f.object.anonymous?}
   end
