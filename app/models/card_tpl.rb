@@ -349,6 +349,13 @@ class CardTpl < ActiveRecord::Base
           send_message_acquired_cards phone, number
 
           client.create_activity key: 'card.acquire', owner: Member.find_by_phone(by_phone), recipient: self, :parameters=>{:phone=>phone, :by_phone=>by_phone, :number=>number,:type=>'发券',:msg=>"#{phone}获得了#{number}张卡券,操作员#{by_phone}"}
+          member = Member.get_instance_by_phone(phone)
+          group = client.groups.default.first
+
+          if group && member
+            group.group_members << GroupMember.new(:phone=>member.phone, :started_at=>DateTime.now, :ended_at=>DateTime.now + GroupMember::DEFAULT_PERIOD)
+            # group.members << member
+          end
         end
         return result
       else

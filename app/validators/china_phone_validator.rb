@@ -5,4 +5,8 @@ class ChinaPhoneValidator < ActiveModel::EachValidator
       record.errors[attribute] << (options[:message] || "is not an phone")
     end
   end
+
+  def self.validate?(phone)
+    !phone.to_s.match(REGEX).blank?
+  end
 end
