@@ -303,7 +303,7 @@ class CardTpl < ActiveRecord::Base
   end
 
   def can_send_by_phone? phone
-    if self.class.open.exists?(id)
+    if self.open?
       phone.blank?
     else
       self.class.sendable_by(phone).exists?(id)
