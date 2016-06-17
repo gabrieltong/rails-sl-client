@@ -1,5 +1,6 @@
 
 ActiveAdmin.register CardA do
+  decorate_with CardDecorator
   menu false
   belongs_to :card_a_tpl, :optional=>true
   includes [:card_tpl]
@@ -32,19 +33,21 @@ ActiveAdmin.register CardA do
   index do 
     column :added_quantity_id
     column :code, :sortable=>false
-    date_column :from, :sortable=>false
-    date_column :to, :sortable=>false
+    column :state do |i|
+      i.state_zh
+    end
+    # date_column :from, :sortable=>false
+    # date_column :to, :sortable=>false
     column :sender_phone
     column :phone
     column :checker_phone
     column :time
-    column :state
   end
 
   # filter :type, :as=>:select, :collection=>Card::Type
   # filter :type, :as=>:select, :collection=>CardTpl::Type
   filter :phone
-  filter :card_tpl
+  # filter :card_tpl
   filter :locked_by_tpl
   filter :sender_phone
   filter :checker_phone

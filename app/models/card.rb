@@ -29,7 +29,7 @@ class Card < ActiveRecord::Base
   scope :locked_by, ->(card_id){where(:locked_by_id=>card_id)}
   scope :locked_by_tpl, ->(card_tpl_id){where(:locked_by_tpl_id=>card_tpl_id)}
 
-  scope :has_locked, ->{where.not(:locked_id=>nil)}
+  scope :locked_other, ->{where.not(:locked_id=>nil)}
   scope :locked, ->{where.not(:locked_by_id=>nil)}
   scope :acquired, ->{where.not(:acquired_at=>nil)}
   scope :acquired_by_phone, ->{where.not(:acquired_at=>nil, :phone=>nil)}
@@ -77,6 +77,37 @@ class Card < ActiveRecord::Base
     'type'
   end
 
+  def locked?
+    !locked_by_id.nil?
+  end
+
+  def locked_other?
+    !locked_id.nil?
+  end
+
+  def acquired?
+    !acquired_at.nil?
+  end
+
+  def checked?
+    !checked_at.nil?
+  end
+
+  def active?
+    (self.from.nil? || self.from <= DateTime.now ) && (self.to.nil? || self.to >= DateTime.now )
+  end
+
+  def expired?
+    self.locked? == false && self.acquired? == false && self.to < DateTime.now
+  end
+
+  def checkable?
+    self.acquired? && !self.checked? && self.active?
+  end
+
+  def acquirable?
+    self.locked? == false && self.acquired? == false && self.active?
+  end
 # 冗余：locked_id, locked_tpl_id
   def generate_locked_info
     # 为被绑定的卡券生成冗余

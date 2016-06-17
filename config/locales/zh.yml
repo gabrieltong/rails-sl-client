@@ -457,7 +457,7 @@
       checked_by: '被%{phone}核销'
       locked_by: '被抽奖券卡密%{card}锁定'
       locked_by_tpl: '被抽奖券%{card_tpl}锁定'
-      has_locked: '中奖卷'
+      locked_other: '中奖卷'
       locked: '占用'
       acquired: '已领'
       checked: '已核'
