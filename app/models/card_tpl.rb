@@ -197,11 +197,10 @@ class CardTpl < ActiveRecord::Base
     end
   end
 
+  # 手机号群组权限， 匿名券无需判断
   def groups_can_acquire? phone=''
-    if self.open? && self.anonymous?
+    if self.class.anonymous.include? self.id
       return true
-    elsif self.open? && !self.anonymous?
-      return !phone.blank?
     else
       return self.members.exists?(:phone=>phone)
     end
@@ -253,26 +252,34 @@ class CardTpl < ActiveRecord::Base
     end
   end
 
-  # 卡券领取类型
+  # 游客券，会员券权限判断
+  # 如果phone不是手机号时 ， 必须时游客券
   def acquire_type_can_acquire? phone
-    if phone.blank?
-      return self.class.anonymous.exists?(id)
+    if ChinaPhoneValidator.validate(phone) == false
+      return self.acquire_type.to_sym == :anonymous
     else
       true
     end
   end
 
+  # 根据agent是否公开权限
+  # agent＝:user 说明是微信端领取，必须是公开券
+  # agent＝:admin 说明是客户端发送，必须不是公开券
   def public_type_can_acquire? agent
     if agent.to_sym == :user
-      return self.class.open.exists?(id)
+      return self.open? == true
     elsif agent.to_sym == :admin
-      return self.class.unopen.exists?(id)
+      return self.open? == false
     end
   end
 
+  def open?
+    self.public == true
+  end
   # 验证投放日期日期
   def datetime_can_acquire?
-    self.class.datetime_acquirable.exists?(id)
+    # self.class.datetime_acquirable.exists?(id)
+    self.from < DateTime.now && self.to < DateTime.now
   end
 
   # 验证投放时间
@@ -465,10 +472,6 @@ class CardTpl < ActiveRecord::Base
 
   def anonymous?
     self.acquire_type.to_sym == :anonymous
-  end
-
-  def open?
-    self.public == true
   end
 
   private
