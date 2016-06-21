@@ -3,7 +3,8 @@ ActiveAdmin.register CardA do
   decorate_with CardDecorator
   menu false
   belongs_to :card_a_tpl, :optional=>true
-  includes [:card_tpl]
+  includes [:card_tpl, :locked_by_card=>{:card_tpl=>{}}]
+  # includes [:card_tpl=>{}, :locked_card=>{:card_tpl=>{},:locked_by_card=>{:card_tpl=>{}}}]
 # See permitted parameters documentation:
 # https://github.com/activeadmin/activeadmin/blob/master/docs/2-resource-customization.md#setting-up-strong-parameters
 #

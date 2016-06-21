@@ -147,7 +147,11 @@ ActiveAdmin.register CardTpl do
     end
 
     column :remain do |i|
-      "#{i.cards.acquirable.count}/#{i.total}".html_safe
+      if i.is_a? CardATpl
+        "#{i.cards.acquirable.count}/#{i.total}".html_safe
+      elsif i.is_a? CardBTpl
+        "#{i.locked_cards.locked_acquirable.size}/#{i.cards.acquirable.count}/#{i.total}".html_safe
+      end
     end
 
     actions :defaults=>true do |i|

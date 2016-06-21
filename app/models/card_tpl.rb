@@ -26,6 +26,7 @@ class CardTpl < ActiveRecord::Base
   has_many :images, :as=>:imageable
   has_many :draw_awards
   has_many :cards
+  has_many :locked_cards, :through=>:cards, :source=>:locked_card
 
   scope :by_client, ->(client_id){where(:client_id=>client_id)}
   scope :ab, ->{where(:type=>[:CardATpl, :CardBTpl])}
@@ -61,6 +62,7 @@ class CardTpl < ActiveRecord::Base
   accepts_nested_attributes_for :quantities, :allow_destroy => false
 
   validates :groups, :presence=> true
+  validates :desc, :intro, :cover, :share_cover, :presence=> true
   validates :client_id, :title, :presence=>true
   validates :person_limit, :numericality => {:greater_than => 0}
   validates :total, :numericality => {:only_integer => true, :greater_than_or_equal_to => 0}
@@ -81,11 +83,13 @@ class CardTpl < ActiveRecord::Base
   validates_attachment_content_type :guide_cover, content_type: /\Aimage\/.*\Z/
 
   after_initialize do |record|
-    record.acquire_weeks = UseWeeks.values
-    record.check_weeks = UseWeeks.values
-    record.check_hours = UseHours.values
-    record.public = true
-    record.groups = client.groups if client
+    if record.new_record?
+      record.acquire_weeks = UseWeeks.values
+      record.check_weeks = UseWeeks.values
+      record.check_hours = UseHours.values
+      record.public = true
+      record.groups = client.groups if client
+    end
   end 
 
   after_save do |record|
@@ -176,6 +180,13 @@ class CardTpl < ActiveRecord::Base
     end
   end
 
+  def dynamic?
+    indate_type.to_sym == :dynamic if indate_type
+  end
+
+  def fixed?
+    indate_type.to_sym == :fixed if indate_type
+  end
 
   def check phone, by_phone, number=1
     if can_check? != true

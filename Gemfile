@@ -41,6 +41,7 @@ gem 'grape_on_rails_routes'
 gem 'public_activity'
 gem 'dotenv-rails'
 gem 'activesupport-json_encoder'
+gem "activerecord-import"
 gem 'bulk_insert'
 # gem 'will_paginate'
 gem 'randumb'

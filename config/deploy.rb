@@ -35,13 +35,19 @@ set :linked_dirs, fetch(:linked_dirs, []).push('log', 'tmp/pids', 'tmp/cache', '
 # set :keep_releases, 5
 
 namespace :deploy do
-  after 'deploy:published', 'restart' do
-		on roles(:web) do
+  after :restart, :clear_cache do
+    on roles(:web), in: :groups, limit: 3, wait: 10 do
+      # Here we can do anything such as:
       within release_path do
-        with rails_env: fetch(:rails_env) do
-					execute :touch,'tmp/restart.txt'
-      	end
+        execute :touch,'tmp/restart.txt'
+        execute :touch, 'log/access.log'
+        execute :touch, 'log/error.log'
+        execute :chown, '-R nobody:nobody tmp'
+        execute :chown, '-R nobody:nobody log'
+        execute :chown, '-R nobody:nobody public/system'
       end
     end
   end
+
 end
+
